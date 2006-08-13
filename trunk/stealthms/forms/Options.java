@@ -1,12 +1,6 @@
 package stealthms.forms;
 
-
-
-import javax.microedition.lcdui.Command;
-import javax.microedition.lcdui.CommandListener;
-import javax.microedition.lcdui.Displayable;
-import javax.microedition.lcdui.Form;
-import javax.microedition.lcdui.TextField;
+import javax.microedition.lcdui.*;
 
 import stealthms.StealthMS;
 import stealthms.storage.*;
@@ -27,6 +21,8 @@ public class Options extends Form implements CommandListener {
 	private TextField copyTextField;
 	
 	private TextField familyTextField;
+
+	private ChoiceGroup Translit;
 	
 	private Command cancCommand;
 
@@ -51,7 +47,11 @@ public class Options extends Form implements CommandListener {
 		append(copyTextField);
 		familyTextField = new TextField("Семья", "", 100, TextField.ANY);
 		append(familyTextField);
-		
+		// Adding groupPopup
+		String[] mygroup = {"Выкл", "Вкл"};
+		Translit = new ChoiceGroup("Транслит", ChoiceGroup.POPUP, mygroup, null);	
+		append(Translit);
+		setTranslit(OptionsStorage.TranslitStat);
 		// Adding commands
 		cancCommand = new Command("Отмена", Command.BACK, 0);
 		saveCommand = new Command("Сохранить", Command.OK, 0);
@@ -116,6 +116,14 @@ public class Options extends Form implements CommandListener {
 		familyTextField.setString(user);
 	}
 
+	public int getTranslit() {
+		return Translit.getSelectedIndex();
+	}
+
+	public void setTranslit(int translit) {
+		Translit.setSelectedIndex(translit, true);
+	}
+
 	public void commandAction(Command comm, Displayable disp) {
 		if (comm == saveCommand) {
 			OptionsStorage.setUrl(getUrl());
@@ -125,6 +133,7 @@ public class Options extends Form implements CommandListener {
 			OptionsStorage.setGates(getGates());
 			OptionsStorage.setCopy(getCopy());
 			OptionsStorage.setFamily(getFamily());
+			OptionsStorage.setTranslitStat(getTranslit());
 			OptionsStorage.saveSettings();
 			midlet.displayMessage();
 		}

@@ -6,8 +6,7 @@ import java.io.OutputStream;
 import javax.microedition.io.Connector;
 import javax.microedition.io.HttpConnection;
 
-import stealthms.utilities.Transliterator;
-
+import stealthms.utilities.TextFormatter;
 
 public class HttpMessageSender extends MessageSender {
 	private HttpConnection hcon;
@@ -79,8 +78,8 @@ public class HttpMessageSender extends MessageSender {
 	}
 
 	public void sendMessage(String message, String phone) throws Exception {
-		Transliterator tr = new Transliterator();
-		int numParts = splitext(tr.translit(message));
+		TextFormatter tf = new TextFormatter();
+			int numParts = splitext(tf.translit(message));
 		for (int i = 1; i <= numParts; i++) {
 			hcon = (HttpConnection) Connector.open(Url);
 			sendingForm.setGaugeValue(2);
