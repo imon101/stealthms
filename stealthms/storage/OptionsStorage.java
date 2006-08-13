@@ -26,6 +26,8 @@ public class OptionsStorage {
 	private static int LastTitle;
 	
 	private static String Family;
+
+	public static int TranslitStat;
 	
 	public static void saveSettings() {
 		RecordStore recordStore;
@@ -48,6 +50,7 @@ public class OptionsStorage {
 				outputStream.writeUTF(Titles[i]);
 			}
 			outputStream.writeUTF(Family);
+			outputStream.writeInt(TranslitStat);
 			byte[] bytes = baos.toByteArray();
 			if (recordStore.getNumRecords() == 0)
 				recordStore.addRecord(bytes, 0, bytes.length);
@@ -76,6 +79,7 @@ public class OptionsStorage {
 				Titles[i] = "";
 			}
 			Family = "8063%";
+			TranslitStat = 0;
 			saveSettings();
 			return;
 		}
@@ -94,6 +98,7 @@ public class OptionsStorage {
 				Titles[i] = inputStream.readUTF();
 			}
 			Family = inputStream.readUTF();
+			TranslitStat = inputStream.readInt();			
 			inputStream.close();
 			recordStore.closeRecordStore();
 		} catch (Exception e) {
@@ -171,4 +176,12 @@ public class OptionsStorage {
 	public static void setFamily(String family) {
 		Family = family;
 	}
+
+	public static int getTranslitStat() {
+		return TranslitStat;
+	}
+
+	public static void setTranslitStat(int translitstat) {
+		TranslitStat = translitstat;
+	}		
 }

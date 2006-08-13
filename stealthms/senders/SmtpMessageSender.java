@@ -126,15 +126,20 @@ public class SmtpMessageSender extends MessageSender {
 				executeCommand(is, os, "HELO StealthMS");
 				sendingForm.setGaugeValue(5);
 			}
-			Transliterator tr = new Transliterator();
-			int numParts = splitext(tr.translit(message));
+			TextFormatter tf = new TextFormatter();
+			int numParts = 0;
+			numParts = splitext(tf.translit(message));
 			for (int i = numParts; i >= 0; i--) {
 				String tempMask = lastMask;
 				if (Copy.compareTo("") != 0 && i == 0) {
 					mail = getEmailAddr(Copy);
 					DateFormatter df = new DateFormatter();
-					messageParts[0] = "Soobshenie dlya " + phone + " ot "
-							+ df.formatCurrentDate() + " otpravleno.";
+					if (stealthms.storage.OptionsStorage.TranslitStat == 0) {
+						messageParts[0] = "Сообщение для " + phone + " от " +
+								 df.formatCurrentDate() + " отправлено."; } else {
+						messageParts[0] = "Soobshenie dlya " + phone + " ot " +
+								 df.formatCurrentDate() + " otpravleno."; 
+					}
 				}
 				if ((Copy.compareTo("") != 0 && tempMask.compareTo(lastMask) == 0)
 						|| i != 0) {

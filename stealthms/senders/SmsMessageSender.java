@@ -1,21 +1,21 @@
 package stealthms.senders;
 
-import com.siemens.mp.gsm.SMS;
+//import com.siemens.mp.gsm.SMS;
 import javax.microedition.io.*;
 import javax.wireless.messaging.*;
 
-import stealthms.utilities.Transliterator;
+import stealthms.utilities.TextFormatter;
 
 public class SmsMessageSender extends MessageSender {
 	public void sendMessage(String message, String phone) throws Exception {
-		Transliterator tr = new Transliterator();
+		TextFormatter tf = new TextFormatter();
 		sendingForm.setGaugeValue(0);
-		message = tr.translit(message);
+		message = tf.translit(message);
 		sendingForm.setGaugeValue(2);
-		if (System.getProperty("microedition.profiles").compareTo("MIDP-1.0") == 0) {
+		/*if (System.getProperty("microedition.profiles").compareTo("MIDP-1.0") == 0) {
 			SMS.send(phone, message);
 			sendingForm.setGaugeValue(10);
-		} else {
+		} else {*/
 			String addr = "sms://" + phone;
 			MessageConnection conn = (MessageConnection) Connector.open(addr);
 			sendingForm.setGaugeValue(4);
@@ -24,7 +24,7 @@ public class SmsMessageSender extends MessageSender {
 			sendingForm.setGaugeValue(5);
 			conn.send(msg);
 			sendingForm.setGaugeValue(10);
-		}
+		/*}*/
 	}
 }
 
