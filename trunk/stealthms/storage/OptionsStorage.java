@@ -27,7 +27,7 @@ public class OptionsStorage {
 	
 	private static String Family;
 
-	public static int TranslitStat;
+	private static int TranslitStat;
 	
 	public static void saveSettings() {
 		RecordStore recordStore;

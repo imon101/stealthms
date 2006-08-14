@@ -51,7 +51,7 @@ public class Options extends Form implements CommandListener {
 		String[] mygroup = {"Выкл", "Вкл"};
 		Translit = new ChoiceGroup("Транслит", ChoiceGroup.POPUP, mygroup, null);	
 		append(Translit);
-		setTranslit(OptionsStorage.TranslitStat);
+		setTranslit(OptionsStorage.getTranslitStat());
 		// Adding commands
 		cancCommand = new Command("Отмена", Command.BACK, 0);
 		saveCommand = new Command("Сохранить", Command.OK, 0);
