@@ -134,7 +134,7 @@ public class SmtpMessageSender extends MessageSender {
 				if (Copy.compareTo("") != 0 && i == 0) {
 					mail = getEmailAddr(Copy);
 					DateFormatter df = new DateFormatter();
-					if (stealthms.storage.OptionsStorage.TranslitStat == 0) {
+					if (stealthms.storage.OptionsStorage.getTranslitStat() == 0) {
 						messageParts[0] = "Сообщение для " + phone + " от " +
 								 df.formatCurrentDate() + " отправлено."; } else {
 						messageParts[0] = "Soobshenie dlya " + phone + " ot " +
