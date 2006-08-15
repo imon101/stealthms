@@ -47,7 +47,12 @@ public class Options extends Form implements CommandListener {
 		familyTextField = new TextField("Семья", "", 100, TextField.ANY);
 		append(familyTextField);
 		String[] mygroup = {"Выкл", "Вкл"};
-		Translit = new ChoiceGroup("Транслит", ChoiceGroup.POPUP, mygroup, null);	
+		
+		int TranslitType = ChoiceGroup.POPUP;
+		if (System.getProperty("microedition.profiles").compareTo("MIDP-1.0") == 0) {
+			TranslitType = ChoiceGroup.EXCLUSIVE;
+		}
+		Translit = new ChoiceGroup("Транслит", TranslitType, mygroup, null);	
 		append(Translit);
 		setTranslit(OptionsStorage.getTranslitStat());
 		// Adding commands
