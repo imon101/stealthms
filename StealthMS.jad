@@ -1,6 +1,7 @@
+MIDlet-Version: 1.55
+MIDlet-Vendor: Stealth
 MIDlet-Jar-URL: StealthMS.jar
-MIDlet-Name: StealthMS Midlet Suite
-MIDlet-Vendor: Midlet Suite Vendor
-MIDlet-Version: 1.0.0
 MicroEdition-Configuration: CLDC-1.1
 MicroEdition-Profile: MIDP-2.0
+MIDlet-1: StealthMS,StealthMS.png,stealthms.StealthMS
+MIDlet-Name: StealthMS
