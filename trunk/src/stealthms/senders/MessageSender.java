@@ -2,6 +2,7 @@ package stealthms.senders;
 
 import stealthms.StealthMS;
 import stealthms.forms.Sending;
+import stealthms.storage.OptionsStorage;
 
 public class MessageSender {
 	protected String Url;
@@ -15,7 +16,8 @@ public class MessageSender {
 	protected StealthMS midlet;
 
 	protected int splitext(String text) {
-		int maxlen = 153 - User.length();
+		int maxMessageLength = (OptionsStorage.getTranslitStat() == 0)?63:153;
+		int maxlen = maxMessageLength - User.length();
 		messageParts = new String[10];
 		int currentPart = 1;
 		if (text.length() <= (maxlen + 6)) {
