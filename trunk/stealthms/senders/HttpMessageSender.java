@@ -79,7 +79,7 @@ public class HttpMessageSender extends MessageSender {
 
 	public void sendMessage(String message, String phone) throws Exception {
 		TextFormatter tf = new TextFormatter();
-			int numParts = splitext(tf.translit(message));
+			int numParts = splitext(tf.translit(message, false));
 		for (int i = 1; i <= numParts; i++) {
 			hcon = (HttpConnection) Connector.open(Url);
 			sendingForm.setGaugeValue(2);

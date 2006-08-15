@@ -10,7 +10,7 @@ public class SmsMessageSender extends MessageSender {
 	public void sendMessage(String message, String phone) throws Exception {
 		TextFormatter tf = new TextFormatter();
 		sendingForm.setGaugeValue(0);
-		message = tf.translit(message);
+		message = tf.translit(message, false);
 		sendingForm.setGaugeValue(2);
 		if (System.getProperty("microedition.profiles").compareTo("MIDP-1.0") == 0) {
 			SMS.send(phone, message);

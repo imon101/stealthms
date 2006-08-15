@@ -3,9 +3,13 @@ package stealthms.utilities;
 import stealthms.storage.OptionsStorage;
 
 public class TextFormatter {
-	public String translit(String text) {
+	public String translit(String text, boolean utf) {
 		if (OptionsStorage.getTranslitStat() == 0) {
-			return Ascii2Utf(text); 
+			if (utf==true) {
+				return Ascii2Utf(text);
+			} else {
+				return text;
+			}
 		} else {
 			StringBuffer sb = new StringBuffer();
 			for (int i = 0; i < text.length(); i++) {

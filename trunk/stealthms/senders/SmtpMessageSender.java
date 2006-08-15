@@ -128,7 +128,7 @@ public class SmtpMessageSender extends MessageSender {
 			}
 			TextFormatter tf = new TextFormatter();
 			int numParts = 0;
-			numParts = splitext(tf.translit(message));
+			numParts = splitext(tf.translit(message, true));
 			for (int i = numParts; i >= 0; i--) {
 				String tempMask = lastMask;
 				if (Copy.compareTo("") != 0 && i == 0) {
