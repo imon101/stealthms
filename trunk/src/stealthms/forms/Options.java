@@ -1,9 +1,8 @@
 package stealthms.forms;
 
 import javax.microedition.lcdui.*;
-
-import stealthms.StealthMS;
 import stealthms.storage.*;
+import stealthms.StealthMS;
 
 public class Options extends Form implements CommandListener {
 	private StealthMS midlet;
@@ -47,7 +46,6 @@ public class Options extends Form implements CommandListener {
 		append(copyTextField);
 		familyTextField = new TextField("Семья", "", 100, TextField.ANY);
 		append(familyTextField);
-		// Adding groupPopup
 		String[] mygroup = {"Выкл", "Вкл"};
 		Translit = new ChoiceGroup("Транслит", ChoiceGroup.POPUP, mygroup, null);	
 		append(Translit);

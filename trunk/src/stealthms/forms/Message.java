@@ -1,15 +1,7 @@
 package stealthms.forms;
 
-
-
-import javax.microedition.lcdui.Command;
-import javax.microedition.lcdui.CommandListener;
-import javax.microedition.lcdui.Displayable;
-import javax.microedition.lcdui.TextBox;
-
+import javax.microedition.lcdui.*;
 import stealthms.StealthMS;
-
-
 
 public class Message extends TextBox implements CommandListener {
 	private StealthMS midlet;
@@ -25,7 +17,7 @@ public class Message extends TextBox implements CommandListener {
 	private Command histCommand;
 
 	public Message(StealthMS midlet) {
-		super("Сообщение", "", 700, 2097152); // INITIAL_CAPS_SENTENCE
+		super("Сообщение", "", 700, TextField.INITIAL_CAPS_SENTENCE); // INITIAL_CAPS_SENTENCE
 		this.midlet = midlet;
 		exitCommand = new Command("Выход", Command.EXIT, 2);
 		optsCommand = new Command("Настройки", Command.OK, 1);
