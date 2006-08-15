@@ -136,7 +136,8 @@ public class SmtpMessageSender extends MessageSender {
 					DateFormatter df = new DateFormatter();
 					if (stealthms.storage.OptionsStorage.getTranslitStat() == 0) {
 						messageParts[0] = "Сообщение для " + phone + " от " +
-								 df.formatCurrentDate() + " отправлено."; } else {
+								 df.formatCurrentDate() + " отправлено.";
+					} else {
 						messageParts[0] = "Soobshenie dlya " + phone + " ot " +
 								 df.formatCurrentDate() + " otpravleno."; 
 					}
