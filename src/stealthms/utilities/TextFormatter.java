@@ -6,7 +6,7 @@ public class TextFormatter {
 	public String translit(String text, boolean utf) {
 		if (OptionsStorage.getTranslitStat() == 0) {
 			if (utf==true) {
-				return Ascii2Utf(text);
+				return Utf2Ascii(text);
 			} else {
 				return text;
 			}
