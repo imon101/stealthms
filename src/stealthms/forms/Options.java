@@ -20,6 +20,8 @@ public class Options extends Form implements CommandListener {
 	private TextField copyTextField;
 	
 	private TextField familyTextField;
+	
+	private TextField httpTextField;
 
 	private ChoiceGroup Translit;
 	
@@ -46,8 +48,10 @@ public class Options extends Form implements CommandListener {
 		append(copyTextField);
 		familyTextField = new TextField("Семья", "", 100, TextField.ANY);
 		append(familyTextField);
-		String[] mygroup = {"Выкл", "Вкл"};
+		httpTextField = new TextField("Через KS", "", 100, TextField.ANY);
+		append(httpTextField);
 		
+		String[] mygroup = {"Выкл", "Вкл"};
 		int TranslitType = ChoiceGroup.POPUP;
 		if (System.getProperty("microedition.profiles").compareTo("MIDP-1.0") == 0) {
 			TranslitType = ChoiceGroup.EXCLUSIVE;
@@ -118,6 +122,14 @@ public class Options extends Form implements CommandListener {
 	public void setFamily(String user) {
 		familyTextField.setString(user);
 	}
+	
+	public String getHttp() {
+		return httpTextField.getString();
+	}
+
+	public void setHttp(String user) {
+		httpTextField.setString(user);
+	}
 
 	public int getTranslit() {
 		return Translit.getSelectedIndex();
@@ -136,6 +148,7 @@ public class Options extends Form implements CommandListener {
 			OptionsStorage.setGates(getGates());
 			OptionsStorage.setCopy(getCopy());
 			OptionsStorage.setFamily(getFamily());
+			OptionsStorage.setHttp(getHttp());
 			OptionsStorage.setTranslitStat(getTranslit());
 			OptionsStorage.saveSettings();
 			midlet.displayMessage();

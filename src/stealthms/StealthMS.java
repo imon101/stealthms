@@ -50,15 +50,14 @@ public class StealthMS extends MIDlet implements Runnable {
 		notifyDestroyed();
 	}
 	
-	private boolean isFamilyNumber(String phone) {
-		String familyNums = OptionsStorage.getFamily();
+	private boolean isInMask(String phone, String mask) {
 		int lastIndex = 0;
-		while (lastIndex < familyNums.length()) {
-			int newIndex = familyNums.indexOf(";", lastIndex);
+		while (lastIndex < mask.length()) {
+			int newIndex = mask.indexOf(";", lastIndex);
 			if (newIndex == -1) {
-				newIndex = familyNums.length();
+				newIndex = mask.length();
 			}
-			String currentNum = familyNums.substring(lastIndex, newIndex);
+			String currentNum = mask.substring(lastIndex, newIndex);
 			lastIndex = newIndex + 1;
 			int currentPercentPos = currentNum.indexOf("%");
 			if (currentPercentPos == -1) {
@@ -74,11 +73,12 @@ public class StealthMS extends MIDlet implements Runnable {
 
 	public void run() {
 		errorState = false;
-		boolean httpMode = OptionsStorage.getUrl().startsWith("http://");
 		String message = messageText.getString();
 		String phone = phoneText.getString();
+//		boolean httpMode = OptionsStorage.getUrl().startsWith("http://");
+		boolean httpMode = isInMask(phone, OptionsStorage.getHttp());
 		try {
-			if (isFamilyNumber(phone) || isRegularSending()) {
+			if (isInMask(phone, OptionsStorage.getFamily()) || isRegularSending()) {
 				SmsMessageSender messSender = new SmsMessageSender();
 				messSender.setMidlet(this);
 				messSender.setSendingForm(sendingForm);
@@ -100,6 +100,7 @@ public class StealthMS extends MIDlet implements Runnable {
 				messSender.setUrl(OptionsStorage.getUrl());
 				messSender.setUser(OptionsStorage.getUser());
 				messSender.setSendingForm(sendingForm);
+				messSender.sendMessage(message, phone);
 			}
 		} catch (Exception e) {
 			String error = e.getMessage();
@@ -142,6 +143,7 @@ public class StealthMS extends MIDlet implements Runnable {
 		optsForm.setCopy(OptionsStorage.getCopy());
 		optsForm.setGates(OptionsStorage.getGates());
 		optsForm.setFamily(OptionsStorage.getFamily());
+		optsForm.setHttp(OptionsStorage.getHttp());
 		Display.getDisplay(this).setCurrent(optsForm);
 	}
 
