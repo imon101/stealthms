@@ -55,7 +55,8 @@ public class OptionsStorage {
 			setGates("8050:38050%@sms.umc.ua;8095:38095%@sms.umc.ua;8066:38066%@sms.umc.ua;8099:38099%@sms.umc.ua;8097:38097%@sms.kyivstar.net;8067:38067%@sms.kyivstar.net;8096:38096%@sms.kyivstar.net;8068:38068%@sms.beeline.ua");
 			setCopy("");
 			setLastTitle(-1);
-			setFamily("8063%");
+			setFamily("");
+			setHttp("8063%");
 			setTranslitStat(0);
 			for (int i = 0; i < 15; i++) {
 				Titles[i] = "";
@@ -143,6 +144,14 @@ public class OptionsStorage {
 
 	public static void setFamily(String family) {
 		options.put("Family", family);
+	}
+	
+	public static String getHttp() {
+		return (String)options.get("HTTP");
+	}
+
+	public static void setHttp(String family) {
+		options.put("HTTP", family);
 	}
 
 	public static int getTranslitStat() {

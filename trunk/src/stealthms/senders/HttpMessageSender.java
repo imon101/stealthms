@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import javax.microedition.io.Connector;
 import javax.microedition.io.HttpConnection;
 
+import stealthms.storage.OptionsStorage;
 import stealthms.utilities.TextFormatter;
 
 public class HttpMessageSender extends MessageSender {
@@ -78,27 +79,31 @@ public class HttpMessageSender extends MessageSender {
 	}
 
 	public void sendMessage(String message, String phone) throws Exception {
+		String number = phone.substring(phone.length() - 7);
+		String mobcode = phone.substring(phone.length() - 10, phone.length() - 7);
 		TextFormatter tf = new TextFormatter();
-			int numParts = splitext(tf.translit(message, false));
+		int numParts = splitext(tf.translit(message, false));
 		for (int i = 1; i <= numParts; i++) {
-			hcon = (HttpConnection) Connector.open(Url);
+			hcon = (HttpConnection) Connector.open("http://www.kyivstar.net/_sms.html");
 			sendingForm.setGaugeValue(2);
 			hcon.setRequestMethod(HttpConnection.POST);
-			hcon.setRequestProperty("Content-Type",
-					"application/x-www-form-urlencoded");
-			String request = "from=" + User + "&phone=" + phone + "&message="
-					+ urlEncode(messageParts[i]);
-			hcon.setRequestProperty("Content-Length", Integer.toString(request
-					.length()));
-			hcon.setRequestProperty("Host", stripHost(Url));
+//			hcon.setRequestProperty("Host", "www.kyivstar.net");
+			String lat = (OptionsStorage.getTranslitStat() == 0) ? "0" : "1";
+			String request = "submitted=true&number=" + number + "&mobcode=" +
+				mobcode + "&antispam=3488&lang=ru&lat=" + lat + "&message=" +
+				urlEncode(User + "\n" + messageParts[i]);
+			hcon.setRequestProperty("Cookie", "code=3488");
+			hcon.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+//			hcon.setRequestProperty("Content-Length", Integer.toString(request
+//					.length()));
 			OutputStream os = hcon.openOutputStream();
 			sendingForm.setGaugeValue(5);
 			os.write(request.getBytes());
 			os.flush();
 			sendingForm.setGaugeValue(7);
 			int status = hcon.getResponseCode();
-			if (status != HttpConnection.HTTP_OK) {
-				throw new IOException("Неправильный код ответа");
+			if (status != HttpConnection.HTTP_MOVED_TEMP) {
+				throw new IOException("Неправильный код ответа " + Integer.toString(status));
 			}
 			sendingForm.setGaugeValue(9);
 		}
