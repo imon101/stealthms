@@ -144,6 +144,7 @@ public class StealthMS extends MIDlet implements Runnable {
 		optsForm.setGates(OptionsStorage.getGates());
 		optsForm.setFamily(OptionsStorage.getFamily());
 		optsForm.setHttp(OptionsStorage.getHttp());
+		optsForm.setTranslit(OptionsStorage.getTranslitStat());
 		Display.getDisplay(this).setCurrent(optsForm);
 	}
 
