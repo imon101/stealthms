@@ -134,13 +134,8 @@ public class SmtpMessageSender extends MessageSender {
 				if (Copy.compareTo("") != 0 && i == 0) {
 					mail = getEmailAddr(Copy);
 					DateFormatter df = new DateFormatter();
-					if (stealthms.storage.OptionsStorage.getTranslitStat() == 0) {
-						messageParts[0] = "Сообщение для " + phone + " от " +
-								 df.formatCurrentDate() + " отправлено.";
-					} else {
-						messageParts[0] = "Soobshenie dlya " + phone + " ot " +
-								 df.formatCurrentDate() + " otpravleno."; 
-					}
+					messageParts[0] = tf.translit("Сообщение для " + phone + " от " +
+						 df.formatCurrentDate() + " отправлено.", true);
 				}
 				if ((Copy.compareTo("") != 0 && tempMask.compareTo(lastMask) == 0)
 						|| i != 0) {
