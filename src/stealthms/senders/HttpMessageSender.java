@@ -103,8 +103,8 @@ public class HttpMessageSender extends MessageSender {
 				encode(User + "\n" + messageParts[i]);
 			hcon.setRequestProperty("Cookie", "code=3488");
 			hcon.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-//			hcon.setRequestProperty("Content-Length", Integer.toString(request
-//					.length()));
+			hcon.setRequestProperty("Content-Length", Integer.toString(request
+					.length()));
 			OutputStream os = hcon.openOutputStream();
 			sendingForm.setGaugeValue(5);
 			os.write(request.getBytes());
