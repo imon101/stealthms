@@ -64,7 +64,7 @@ public class StealthMS extends MIDlet implements Runnable {
 				currentPercentPos = currentNum.length();
 			}
 			String currentPrefix = currentNum.substring(0, currentPercentPos);
-			if (phone.startsWith(currentPrefix)) {
+			if (phone.startsWith(currentPrefix) || phone.startsWith("+3" + currentPrefix)) {
 				return true;
 			}
 		}
