@@ -3,6 +3,7 @@ package stealthms.senders;
 import java.io.*;
 import javax.microedition.io.*;
 
+import stealthms.storage.OptionsStorage;
 import stealthms.utilities.*;
 
 public class SmtpMessageSender extends MessageSender {
@@ -37,9 +38,13 @@ public class SmtpMessageSender extends MessageSender {
 	}
 
 	private String getAuthString(String user, String pass) {
+		return base64Encode("\000" + user + "\000" + pass);
+	}
+	
+	private String base64Encode(String str) {
 		char[] charTab = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
-				.toCharArray();
-		byte[] data = ("\000" + user + "\000" + pass).getBytes();
+			.toCharArray();
+		byte[] data = str.getBytes();
 		StringBuffer buf = new StringBuffer();
 		int start = 0;
 		int len = data.length;
@@ -120,8 +125,14 @@ public class SmtpMessageSender extends MessageSender {
 			sendingForm.setGaugeValue(4);
 			if (SMUser.compareTo("") != 0) {
 				executeCommand(is, os, "EHLO StealthMS");
-				executeCommand(is, os, "AUTH PLAIN "
+				if (OptionsStorage.getAuthLogin() == 0) {
+					executeCommand(is, os, "AUTH PLAIN "
 						+ getAuthString(SMUser, SMPass));
+				} else {
+					executeCommand(is, os, "AUTH LOGIN");
+					executeCommand(is, os, base64Encode(SMUser));
+					executeCommand(is, os, base64Encode(SMPass));
+				}
 			} else {
 				executeCommand(is, os, "HELO StealthMS");
 				sendingForm.setGaugeValue(5);

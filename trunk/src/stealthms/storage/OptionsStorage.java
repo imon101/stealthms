@@ -58,6 +58,7 @@ public class OptionsStorage {
 			setFamily("");
 			setHttp("8063%");
 			setTranslitStat(0);
+			setAuthLogin(0);
 			for (int i = 0; i < 15; i++) {
 				Titles[i] = "";
 			}
@@ -160,6 +161,14 @@ public class OptionsStorage {
 
 	public static void setTranslitStat(int translitstat) {
 		options.put("TranslitStat", Integer.toString(translitstat));
+	}
+	
+	public static int getAuthLogin() {
+		return Integer.parseInt((String)options.get("AuthLogin"));
+	}
+
+	public static void setAuthLogin(int authlogin) {
+		options.put("AuthLogin", Integer.toString(authlogin));
 	}
 	
 	public static String[] getTitles() {
