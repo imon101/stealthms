@@ -48,7 +48,7 @@ public class OptionsStorage {
 		try {
 			recordStore = RecordStore.openRecordStore("SMS", false);
 		} catch (RecordStoreException rse) {
-			setUser("somebody@cmc.ru");
+			setUser("somebody@ukr.net");
 			setUrl("smtp.umc.ua");
 			setSMUser("");
 			setSMPass("");
@@ -57,7 +57,7 @@ public class OptionsStorage {
 			setLastTitle(-1);
 			setFamily("");
 			setHttp("8063%");
-			setTranslitStat(0);
+			setTranslitStat(1);
 			setAuthLogin(0);
 			for (int i = 0; i < 15; i++) {
 				Titles[i] = "";
