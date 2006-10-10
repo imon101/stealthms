@@ -25,6 +25,8 @@ public class Options extends Form implements CommandListener {
 
 	private ChoiceGroup Translit;
 	
+	private ChoiceGroup AuthType;
+	
 	private Command cancCommand;
 
 	private Command saveCommand;
@@ -51,13 +53,18 @@ public class Options extends Form implements CommandListener {
 		httpTextField = new TextField("Через KS", "", 100, TextField.ANY);
 		append(httpTextField);
 		
-		String[] mygroup = {"Выкл", "Вкл"};
-		int TranslitType = ChoiceGroup.POPUP;
+		String[] trOptions = {"Выкл", "Вкл"};
+		int ChoiceType = ChoiceGroup.POPUP;
 		if (System.getProperty("microedition.profiles").compareTo("MIDP-1.0") == 0) {
-			TranslitType = ChoiceGroup.EXCLUSIVE;
+			ChoiceType = ChoiceGroup.EXCLUSIVE;
 		}
-		Translit = new ChoiceGroup("Транслит", TranslitType, mygroup, null);	
+		Translit = new ChoiceGroup("Транслит", ChoiceType, trOptions, null);	
 		append(Translit);
+		
+		String[] auOptions = {"PLAIN", "LOGIN"};
+		AuthType = new ChoiceGroup("Авторизация", ChoiceType, auOptions, null);	
+		append(AuthType);
+		
 		// Adding commands
 		cancCommand = new Command("Отмена", Command.BACK, 0);
 		saveCommand = new Command("Сохранить", Command.OK, 0);
@@ -137,6 +144,14 @@ public class Options extends Form implements CommandListener {
 	public void setTranslit(int translit) {
 		Translit.setSelectedIndex(translit, true);
 	}
+	
+	public void setAuthLogin(int authlogin) {
+		AuthType.setSelectedIndex(authlogin, true);
+	}
+	
+	public int getAuthLogin() {
+		return AuthType.getSelectedIndex();
+	}
 
 	public void commandAction(Command comm, Displayable disp) {
 		if (comm == saveCommand) {
@@ -149,6 +164,7 @@ public class Options extends Form implements CommandListener {
 			OptionsStorage.setFamily(getFamily());
 			OptionsStorage.setHttp(getHttp());
 			OptionsStorage.setTranslitStat(getTranslit());
+			OptionsStorage.setAuthLogin(getAuthLogin());
 			OptionsStorage.saveSettings();
 			midlet.displayMessage();
 		}
