@@ -109,13 +109,14 @@ public class HttpMessageSender extends MessageSender {
 			String request = "submitted=true&number=" + number + "&mobcode=" +
 				mobcode + "&antispam=3488&lang=ru&lat=" + lat + "&message=" +
 				encode(getNickFromMail(User) + "\n" + messageParts[i]);
+			hcon.setRequestProperty("User-Agent", "Opera/8.50 (Windows NT 5.1; U; ru)");
 			hcon.setRequestProperty("Cookie", "code=3488");
 			hcon.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-			hcon.setRequestProperty("Content-Length", Integer.toString(request.length()));
+			hcon.setRequestProperty("Content-Length", String.valueOf(request.length()));
 			OutputStream os = hcon.openOutputStream();
 			sendingForm.setGaugeValue(5);
 			os.write(request.getBytes());
-			os.flush();
+			os.close(); //os.flush();
 			sendingForm.setGaugeValue(7);
 			int status = hcon.getResponseCode();
 			if (status != HttpConnection.HTTP_MOVED_TEMP) {
