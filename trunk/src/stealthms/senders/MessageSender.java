@@ -15,9 +15,9 @@ public class MessageSender {
 	
 	protected StealthMS midlet;
 
-	protected int splitext(String text) {
+	protected int splitext(String text, int headerLength) {
 		int maxMessageLength = (OptionsStorage.getTranslitStat() == 0)?63:153;
-		int maxlen = maxMessageLength - User.length();
+		int maxlen = maxMessageLength - headerLength;
 		messageParts = new String[10];
 		int currentPart = 1;
 		if (text.length() <= (maxlen + 6)) {
