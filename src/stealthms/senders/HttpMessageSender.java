@@ -99,7 +99,7 @@ public class HttpMessageSender extends MessageSender {
 		String number = phone.substring(phone.length() - 7);
 		String mobcode = phone.substring(phone.length() - 10, phone.length() - 7);
 		TextFormatter tf = new TextFormatter();
-		int numParts = splitext(tf.translit(message, false));
+		int numParts = splitext(tf.translit(message, false), getNickFromMail(User).length());
 		for (int i = 1; i <= numParts; i++) {
 			hcon = (HttpConnection) Connector.open("http://www.kyivstar.net/_sms.html");
 			sendingForm.setGaugeValue(2);
