@@ -181,7 +181,9 @@ public class StealthMS extends MIDlet implements Runnable {
 	}
 	
 	public void displayRecent() {
-		Display.getDisplay(this).setCurrent(recentList);
+		if (recentList.isReady()) {
+			Display.getDisplay(this).setCurrent(recentList);
+		}
 	}
 	
 	public void updateRecent() {
