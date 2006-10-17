@@ -61,7 +61,7 @@ public class RecentList extends List implements CommandListener, Runnable {
 		for (Enumeration e = phones.elements(); e.hasMoreElements();) {
 			append((String)e.nextElement(), null);
 		}
-		setReady(true);
+		setReady(size() > 0);
 	}
 	
 	public boolean isReady() {
