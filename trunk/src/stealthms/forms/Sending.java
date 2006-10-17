@@ -112,7 +112,9 @@ public class Sending extends Form implements CommandListener {
 	private class ExitTask extends TimerTask {
 		public void run() {
 			exitTimer.cancel();
-			midlet.exitRequested();
+			if (!midlet.isErrorState()) {
+				midlet.exitRequested();
+			}
 		}
 	}
 
