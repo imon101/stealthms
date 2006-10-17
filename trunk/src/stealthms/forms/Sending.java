@@ -49,8 +49,11 @@ public class Sending extends Form implements CommandListener {
 		exitTask = new ExitTask();
 	}
 
-	public void setGaugeValue(int value) {
+	public void setGaugeValue(int value) throws Exception {
 		sendingGauge.setValue(value);
+		if (midlet.isErrorState()) {
+			throw (new Exception("Отменено"));			
+		}
 	}
 
 	public void setGaugeLabel(String label) {

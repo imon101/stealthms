@@ -19,9 +19,6 @@ public class SmtpMessageSender extends MessageSender {
 
 	private void executeCommand(InputStream is, OutputStream os, String command)
 			throws Exception {
-		if (midlet.isErrorState()) {
-			throw (new Exception("Отменено"));			
-		}
 		if (os == null || is == null) {
 			throw (new Exception("Соединение не может быть установлено"));
 		}

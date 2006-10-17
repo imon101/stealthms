@@ -104,7 +104,6 @@ public class HttpMessageSender extends MessageSender {
 			hcon = (HttpConnection) Connector.open("http://www.kyivstar.net/_sms.html");
 			sendingForm.setGaugeValue(2);
 			hcon.setRequestMethod(HttpConnection.POST);
-//			hcon.setRequestProperty("Host", "www.kyivstar.net");
 			String lat = (OptionsStorage.getTranslitStat() == 0) ? "0" : "1";
 			String request = "submitted=true&number=" + number + "&mobcode=" +
 				mobcode + "&antispam=3488&lang=ru&lat=" + lat + "&message=" +
@@ -113,10 +112,11 @@ public class HttpMessageSender extends MessageSender {
 			hcon.setRequestProperty("Cookie", "code=3488");
 			hcon.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 			hcon.setRequestProperty("Content-Length", String.valueOf(request.length()));
+			sendingForm.setGaugeValue(3);
 			OutputStream os = hcon.openOutputStream();
 			sendingForm.setGaugeValue(5);
 			os.write(request.getBytes());
-			os.close(); //os.flush();
+			os.close();
 			sendingForm.setGaugeValue(7);
 			int status = hcon.getResponseCode();
 			if (status != HttpConnection.HTTP_MOVED_TEMP) {
