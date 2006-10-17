@@ -171,7 +171,9 @@ public class StealthMS extends MIDlet implements Runnable {
 	}
 
 	public void displaySending(boolean regular) {
-		sendingForm.setGaugeValue(0);
+		try {
+			sendingForm.setGaugeValue(0);
+		} catch (Exception e) {};
 		sendingForm.setGaugeLabel("Передача...");
 		sendingForm.setSendingState();
 		Display.getDisplay(this).setCurrent(sendingForm);
