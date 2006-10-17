@@ -2,6 +2,9 @@ package stealthms.forms;
 
 
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import javax.microedition.lcdui.*;
 
 import stealthms.StealthMS;
@@ -24,6 +27,10 @@ public class Sending extends Form implements CommandListener {
 	private Command reptCommand;
 	
 	private Command reguCommand;
+	
+	private Timer exitTimer;
+	
+	private ExitTask exitTask;
 
 	public Sending(StealthMS midlet) {
 		super("Отправка");
@@ -37,6 +44,9 @@ public class Sending extends Form implements CommandListener {
 		reptCommand = new Command("Повтор", Command.OK, 0);
 		reguCommand = new Command("Обычное", Command.OK, 1);
 		setCommandListener(this);
+		
+		exitTimer = new Timer();
+		exitTask = new ExitTask();
 	}
 
 	public void setGaugeValue(int value) {
@@ -71,6 +81,8 @@ public class Sending extends Form implements CommandListener {
 		removeSendCommands();
 		addCommand(backCommand);
 		addCommand(exitCommand);
+		exitTimer = new Timer();
+		exitTimer.schedule(exitTask, 5000);
 	}
 	
 	public void commandAction(Command comm, Displayable disp) {
@@ -78,6 +90,7 @@ public class Sending extends Form implements CommandListener {
 			midlet.displaySending(false);
 		}
 		if (comm == exitCommand) {
+			exitTimer.cancel();
 			midlet.exitRequested();
 		}
 		if (comm == cancCommand) {
@@ -85,10 +98,18 @@ public class Sending extends Form implements CommandListener {
 			midlet.displayPhone();
 		}
 		if (comm == backCommand) {
+			exitTimer.cancel();
 			midlet.displayPhone();
 		}
 		if (comm == reguCommand) {
 			midlet.displaySending(true);
+		}
+	}
+	
+	private class ExitTask extends TimerTask {
+		public void run() {
+			exitTimer.cancel();
+			midlet.exitRequested();
 		}
 	}
 
