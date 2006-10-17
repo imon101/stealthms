@@ -25,6 +25,8 @@ public class StealthMS extends MIDlet implements Runnable {
 
 	private HistoryView historyView;
 	
+	private RecentList recentList;
+	
 	private boolean regularSending;
 
 	protected void pauseApp() {
@@ -38,8 +40,10 @@ public class StealthMS extends MIDlet implements Runnable {
 		optsForm = new Options(this);
 		sendingForm = new Sending(this);
 		aboutForm = new About(this);
+		recentList = new RecentList(this);
 		// go to message
 		displayMessage();
+		updateRecent();
 	}
 
 	protected void destroyApp(boolean b) {
@@ -117,6 +121,7 @@ public class StealthMS extends MIDlet implements Runnable {
 			HistoryStorage.addNewMessage(message, phone);
 			sendingForm.setGaugeLabel("Отправлено");
 			sendingForm.setSuccessState();
+			updateRecent();
 		} else {
 			sendingForm.setErrorState();
 		}
@@ -134,7 +139,7 @@ public class StealthMS extends MIDlet implements Runnable {
 	public void displayPhone() {
 		Display.getDisplay(this).setCurrent(phoneText);
 	}
-
+	
 	public void displayOptions() {
 		optsForm.setUrl(OptionsStorage.getUrl());
 		optsForm.setUser(OptionsStorage.getUser());
@@ -173,6 +178,19 @@ public class StealthMS extends MIDlet implements Runnable {
 		Thread sendingThread = new Thread(this);
 		setRegularSending(regular);
 		sendingThread.start();
+	}
+	
+	public void displayRecent() {
+		Display.getDisplay(this).setCurrent(recentList);
+	}
+	
+	public void updateRecent() {
+		new Thread(recentList).start();		
+	}
+	
+	public void setPhoneAndSend(String phone) {
+		phoneText.setString(phone);	
+		displaySending(false);
 	}
 
 	public boolean isErrorState() {

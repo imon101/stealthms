@@ -46,7 +46,7 @@ public class Message extends TextBox implements CommandListener {
 			midlet.displayHistoryList(true);
 		}
 		if (comm == sendCommand) {
-			midlet.displayPhone();			
+			midlet.displayRecent();			
 		}
 	}
 
