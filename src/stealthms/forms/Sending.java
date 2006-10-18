@@ -13,31 +13,31 @@ import stealthms.StealthMS;
 
 
 public class Sending extends Form implements CommandListener {
-
+	
 	private StealthMS midlet;
-
+	
 	private Gauge sendingGauge;
-
+	
 	private Command cancCommand;
-
+	
 	private Command backCommand;
-
+	
 	private Command exitCommand;
-
+	
 	private Command reptCommand;
 	
 	private Command reguCommand;
-	
+
 	private Timer exitTimer;
 	
 	private ExitTask exitTask;
-
+	
 	public Sending(StealthMS midlet) {
 		super("Отправка");
 		this.midlet = midlet;
 		sendingGauge = new Gauge("Передача...", false, 10, 0);
 		append(sendingGauge);
-
+		
 		cancCommand = new Command("Отмена", Command.CANCEL, 1);
 		backCommand = new Command("Назад", Command.BACK, 1);
 		exitCommand = new Command("Выход", Command.EXIT, 0);
@@ -55,11 +55,11 @@ public class Sending extends Form implements CommandListener {
 			throw (new Exception("Отменено"));			
 		}
 	}
-
+	
 	public void setGaugeLabel(String label) {
 		sendingGauge.setLabel(label);
 	}
-
+	
 	private void removeSendCommands() {
 		removeCommand(cancCommand);
 		removeCommand(exitCommand);
@@ -67,7 +67,7 @@ public class Sending extends Form implements CommandListener {
 		removeCommand(reguCommand);
 		removeCommand(backCommand);
 	}
-
+	
 	public void setSendingState() {
 		removeSendCommands();
 		addCommand(cancCommand);
@@ -79,7 +79,7 @@ public class Sending extends Form implements CommandListener {
 		addCommand(reptCommand);
 		addCommand(reguCommand);
 	}
-
+	
 	public void setSuccessState() {
 		removeSendCommands();
 		addCommand(backCommand);

@@ -78,16 +78,30 @@ public class StealthMS extends MIDlet implements Runnable {
 	public void run() {
 		errorState = false;
 		String message = messageText.getString();
-		String phone = phoneText.getString();
+		String phone = phoneText.getString().trim();
 //		boolean httpMode = OptionsStorage.getUrl().startsWith("http://");
 		boolean httpMode = isInMask(phone, OptionsStorage.getHttp());
+		boolean E2SMode = isInMask(phone, OptionsStorage.getE2S());
 		try {
 			if (isInMask(phone, OptionsStorage.getFamily()) || isRegularSending()) {
 				SmsMessageSender messSender = new SmsMessageSender();
 				messSender.setMidlet(this);
 				messSender.setSendingForm(sendingForm);
 				messSender.sendMessage(message, phone);
-			} else if (!httpMode) {
+			} else if (httpMode) {
+				HttpMessageSender messSender = new HttpMessageSender();
+				messSender.setMidlet(this);
+				messSender.setUrl(OptionsStorage.getUrl());
+				messSender.setUser(OptionsStorage.getUser());
+				messSender.setSendingForm(sendingForm);
+				messSender.sendMessage(message, phone);
+			} else if (E2SMode) {
+				E2SMessageSender messSender = new E2SMessageSender();
+				messSender.setMidlet(this);
+				messSender.setUser(OptionsStorage.getUser());
+				messSender.setSendingForm(sendingForm);
+				messSender.sendMessage(message, phone);
+			} else {
 				SmtpMessageSender messSender = new SmtpMessageSender();
 				messSender.setMidlet(this);
 				messSender.setUrl(OptionsStorage.getUrl());
@@ -95,13 +109,6 @@ public class StealthMS extends MIDlet implements Runnable {
 				messSender.setGates(OptionsStorage.getGates());
 				messSender.setSMUser(OptionsStorage.getSMUser());
 				messSender.setSMPass(OptionsStorage.getSMPass());
-				messSender.setUser(OptionsStorage.getUser());
-				messSender.setSendingForm(sendingForm);
-				messSender.sendMessage(message, phone);
-			} else {
-				HttpMessageSender messSender = new HttpMessageSender();
-				messSender.setMidlet(this);
-				messSender.setUrl(OptionsStorage.getUrl());
 				messSender.setUser(OptionsStorage.getUser());
 				messSender.setSendingForm(sendingForm);
 				messSender.sendMessage(message, phone);
@@ -139,7 +146,7 @@ public class StealthMS extends MIDlet implements Runnable {
 	public void displayPhone() {
 		Display.getDisplay(this).setCurrent(phoneText);
 	}
-	
+
 	public void displayOptions() {
 		optsForm.setUrl(OptionsStorage.getUrl());
 		optsForm.setUser(OptionsStorage.getUser());
@@ -149,6 +156,9 @@ public class StealthMS extends MIDlet implements Runnable {
 		optsForm.setGates(OptionsStorage.getGates());
 		optsForm.setFamily(OptionsStorage.getFamily());
 		optsForm.setHttp(OptionsStorage.getHttp());
+		optsForm.setE2S(OptionsStorage.getE2S());
+		optsForm.setE2SUser(OptionsStorage.getE2SUser());
+		optsForm.setE2SPass(OptionsStorage.getE2SPass());
 		optsForm.setTranslit(OptionsStorage.getTranslitStat());
 		optsForm.setAuthLogin(OptionsStorage.getAuthLogin());
 		Display.getDisplay(this).setCurrent(optsForm);

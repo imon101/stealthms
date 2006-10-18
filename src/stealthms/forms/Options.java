@@ -23,6 +23,12 @@ public class Options extends Form implements CommandListener {
 	
 	private TextField httpTextField;
 
+	private TextField E2STextField;
+
+	private TextField E2SUserField;
+
+	private TextField E2SPassField;
+
 	private ChoiceGroup Translit;
 	
 	private ChoiceGroup AuthType;
@@ -52,6 +58,12 @@ public class Options extends Form implements CommandListener {
 		append(familyTextField);
 		httpTextField = new TextField("Через KS", "", 100, TextField.ANY);
 		append(httpTextField);
+		E2STextField = new TextField("Через E2S", "", 100, TextField.ANY);
+		append(E2STextField);
+		E2SUserField = new TextField("Логин E2S", "", 50, TextField.ANY);
+		append(E2SUserField);
+		E2SPassField = new TextField("Пароль E2S", "", 20, TextField.PASSWORD);
+		append(E2SPassField);
 		
 		String[] trOptions = {"Выкл", "Вкл"};
 		int ChoiceType = ChoiceGroup.POPUP;
@@ -163,6 +175,9 @@ public class Options extends Form implements CommandListener {
 			OptionsStorage.setCopy(getCopy());
 			OptionsStorage.setFamily(getFamily());
 			OptionsStorage.setHttp(getHttp());
+			OptionsStorage.setE2S(getE2S());
+			OptionsStorage.setE2SUser(getE2SUser());
+			OptionsStorage.setE2SPass(getE2SPass());
 			OptionsStorage.setTranslitStat(getTranslit());
 			OptionsStorage.setAuthLogin(getAuthLogin());
 			OptionsStorage.saveSettings();
@@ -171,5 +186,29 @@ public class Options extends Form implements CommandListener {
 		if (comm == cancCommand) {
 			midlet.displayMessage();
 		}
+	}
+
+	private String getE2S() {
+		return E2STextField.getString();
+	}
+
+	private String getE2SUser() {
+		return E2SUserField.getString();
+	}
+
+	private String getE2SPass() {
+		return E2SPassField.getString();
+	}
+
+	public void setE2S(String string) {
+		E2STextField.setString(string);
+	}
+
+	public void setE2SUser(String User) {
+		E2SUserField.setString(User);
+	}
+
+	public void setE2SPass(String Pass) {
+		E2SPassField.setString(Pass);
 	}
 }
