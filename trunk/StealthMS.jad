@@ -1,5 +1,5 @@
-MIDlet-Version: 1.66
-MIDlet-Vendor: Stealth
+MIDlet-Version: 1.67
+MIDlet-Vendor: StealthMS Community
 MIDlet-Jar-URL: StealthMS.jar
 MicroEdition-Configuration: CLDC-1.1
 MicroEdition-Profile: MIDP-2.0
