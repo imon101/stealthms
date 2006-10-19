@@ -19,7 +19,7 @@ public class Message extends TextBox implements CommandListener {
 	public Message(StealthMS midlet) {
 		super("Сообщение", "", 700, TextField.INITIAL_CAPS_SENTENCE); // INITIAL_CAPS_SENTENCE
 		this.midlet = midlet;
-		exitCommand = new Command("Выход", Command.BACK, 2);
+		exitCommand = new Command("Выход", Command.BACK, 3);
 		optsCommand = new Command("Настройки", Command.OK, 1);
 		abotCommand = new Command("О программе", Command.OK, 2);
 		histCommand = new Command("Отправленные", Command.OK, 1);
