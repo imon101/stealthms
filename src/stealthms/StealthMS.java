@@ -201,7 +201,9 @@ public class StealthMS extends MIDlet implements Runnable {
 	}
 	
 	public void updateRecent() {
-		new Thread(recentList).start();		
+		Thread upThread = new Thread(recentList);
+		upThread.setPriority(Thread.MIN_PRIORITY);
+		upThread.start();	
 	}
 	
 	public void setPhoneAndSend(String phone) {
