@@ -6,6 +6,7 @@ import javax.microedition.lcdui.*;
 import stealthms.forms.*;
 import stealthms.senders.*;
 import stealthms.storage.*;
+import stealthms.utilities.RecentUpdater;
 
 public class StealthMS extends MIDlet implements Runnable {
 	private boolean errorState;
@@ -28,21 +29,26 @@ public class StealthMS extends MIDlet implements Runnable {
 	private RecentList recentList;
 	
 	private boolean regularSending;
+	
+	private RecentUpdater recentUpdater;
 
 	protected void pauseApp() {
 	}
 
 	protected void startApp() {
 		OptionsStorage.loadSettings();
-		// initialize forms
+		
+		// go to message
 		messageText = new Message(this);
+		displayMessage();
+		
+		// initialize forms 
 		phoneText = new Phone(this);
 		optsForm = new Options(this);
 		sendingForm = new Sending(this);
 		aboutForm = new About(this);
 		recentList = new RecentList(this);
-		// go to message
-		displayMessage();
+
 		updateRecent();
 	}
 
@@ -193,7 +199,7 @@ public class StealthMS extends MIDlet implements Runnable {
 	}
 	
 	public void displayRecent() {
-		if (recentList.isReady()) {
+		if (recentUpdater.isReady()) {
 			Display.getDisplay(this).setCurrent(recentList);
 		} else {
 			displayPhone();			
@@ -201,9 +207,9 @@ public class StealthMS extends MIDlet implements Runnable {
 	}
 	
 	public void updateRecent() {
-		Thread upThread = new Thread(recentList);
-		upThread.setPriority(Thread.MIN_PRIORITY);
-		upThread.start();	
+		recentUpdater = new RecentUpdater(recentList);
+		recentUpdater.setPriority(Thread.MIN_PRIORITY);
+		recentUpdater.start();	
 	}
 	
 	public void setPhoneAndSend(String phone) {
