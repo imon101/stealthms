@@ -18,12 +18,6 @@ public class E2SMessageSender extends MessageSender {
 	private static byte m_aaB[];
 	private static byte m_baB[];
 	
-	public String stripHost(String url) {
-		url = url.substring(7);
-		int slash = url.indexOf("/");
-		return url.substring(0, slash);
-	}
-	
 	public void sendMessage(String message, String phone) throws Exception {
 		String ServerAnswer=new String();
 		try {
@@ -31,7 +25,11 @@ public class E2SMessageSender extends MessageSender {
 		} catch (SecurityException sex) {
 			throw new IOException("Нет доступа к интернету!");
 		} catch (IOException e) {
-			throw new IOException("Ошибка соединения!");
+			if (e.getMessage().startsWith("Неправильный код ответа")) {
+				throw new IOException(e.getMessage());
+			} else {
+				throw new IOException("Ошибка соединения!");
+			}
 		}
 		String sOk=new String();
 		try {
@@ -71,9 +69,15 @@ public class E2SMessageSender extends MessageSender {
 					default: resMsg=resMsg+" страниц";
 				}
 				sendingForm.setGaugeLabel(resMsg);
+			} else if (strNumPages.trim().equalsIgnoreCase("f")) {
+				throw new IOException("Не отправлено!\nСообщение не принято оператором!");
 			} else {
 				throw new IOException("Не отправлено!\nОтвет: "+ServerAnswer);
 			}
+		} else if (ServerAnswer.trim().equalsIgnoreCase("wrong")) {
+			throw new IOException("Не отправлено!\nНеправильный пароль!");
+		} else if (ServerAnswer.trim().equalsIgnoreCase("login")) {
+			throw new IOException("Не отправлено!\nНеправильный логин!");
 		} else {
 			throw new IOException("Не отправлено!\nОтвет: "+ServerAnswer);
 		}
@@ -189,11 +193,6 @@ public class E2SMessageSender extends MessageSender {
 			abyte1 = new byte[(k + 1) * 4];
 		else
 			abyte1 = new byte[k * 4];
-//		boolean flag = false;
-//		boolean flag1 = false;
-//		boolean flag2 = false;
-//		boolean flag3 = false;
-//		boolean flag4 = false;
 		int l = 0;
 		int i1 = 0;
 		int j1 = 0;

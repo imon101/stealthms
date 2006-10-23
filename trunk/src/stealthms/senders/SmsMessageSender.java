@@ -1,6 +1,5 @@
 package stealthms.senders;
 
-import com.siemens.mp.gsm.SMS;
 import javax.microedition.io.*;
 import javax.wireless.messaging.*;
 
@@ -13,8 +12,13 @@ public class SmsMessageSender extends MessageSender {
 		message = tf.translit(message, false);
 		sendingForm.setGaugeValue(2);
 		if (System.getProperty("microedition.profiles").compareTo("MIDP-1.0") == 0) {
-			SMS.send(phone, message);
-			sendingForm.setGaugeValue(10);
+			try {
+				Class.forName("com.siemens.mp.gsm.SMS");
+				com.siemens.mp.gsm.SMS.send(phone, message);
+				sendingForm.setGaugeValue(10);
+			} catch (Throwable t) {
+				throw new Exception("На Вашем телефоне отправка обычных SMS невозможна");
+			}
 		} else {
 			String addr = "sms://" + phone;
 			MessageConnection conn = (MessageConnection) Connector.open(addr);
