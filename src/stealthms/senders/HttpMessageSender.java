@@ -2,6 +2,7 @@ package stealthms.senders;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Random;
 
 import javax.microedition.io.Connector;
 import javax.microedition.io.HttpConnection;
@@ -94,6 +95,11 @@ public class HttpMessageSender extends MessageSender {
 		return mail;
 		
 	}
+	
+	private String getRandomCode() {
+		Random generator = new Random();
+		return String.valueOf(generator.nextInt(9000) + 1000);
+	}
 
 	public void sendMessage(String message, String phone) throws Exception {
 		String number = phone.substring(phone.length() - 7);
@@ -104,12 +110,13 @@ public class HttpMessageSender extends MessageSender {
 			hcon = (HttpConnection) Connector.open("http://www.kyivstar.net/_sms.html");
 			sendingForm.setGaugeValue(2);
 			hcon.setRequestMethod(HttpConnection.POST);
+			String rCode = getRandomCode();
 			String lat = (OptionsStorage.getTranslitStat() == 0) ? "0" : "1";
 			String request = "submitted=true&number=" + number + "&mobcode=" +
-				mobcode + "&antispam=3488&lang=ru&lat=" + lat + "&message=" +
+				mobcode + "&antispam=" + rCode + "&lang=ru&lat=" + lat + "&message=" +
 				encode(getNickFromMail(User) + "\n" + messageParts[i]);
-			hcon.setRequestProperty("User-Agent", "Opera/8.50 (Windows NT 5.1; U; ru)");
-			hcon.setRequestProperty("Cookie", "code=3488");
+			hcon.setRequestProperty("User-Agent", "Opera/9.00 (Windows NT 5.1; U; ru)");
+			hcon.setRequestProperty("Cookie", "code=" + rCode);
 			hcon.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 			hcon.setRequestProperty("Content-Length", String.valueOf(request.length()));
 			sendingForm.setGaugeValue(3);
