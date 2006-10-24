@@ -97,8 +97,8 @@ public class HttpMessageSender extends MessageSender {
 	}
 	
 	private String getRandomCode() {
-		Random generator = new Random();
-		return String.valueOf(generator.nextInt(9000) + 1000);
+		HttpRandom generator = new HttpRandom();
+		return String.valueOf(generator.nextHttpInt());
 	}
 	
 	public void sendMessage(String message, String phone) throws Exception {
@@ -147,5 +147,26 @@ public class HttpMessageSender extends MessageSender {
 			throw new IOException("Неправильный код ответа " + Integer.toString(status));
 		}
 		sendingForm.setGaugeValue(9);
+	}
+	
+	private class HttpRandom extends Random {
+		public int nextHttpInt() {
+			return 1000 + nextIntWithLimit(9000);
+		}
+		
+		private int nextIntWithLimit(int n) {
+			if (n <= 0) {
+				throw new IllegalArgumentException("n must be positive");
+			}
+			if ((n & -n) == n) { // i.e., n is a power of 2
+				return (int)((n * (long)next(31)) >> 31);
+			}
+			int bits, val;
+			do {
+				bits = next(31);
+				val = bits % n;
+			} while (bits - val + (n-1) < 0);
+			return val;
+		}
 	}
 }
