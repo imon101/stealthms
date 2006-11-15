@@ -31,6 +31,10 @@ public class StealthMS extends MIDlet implements Runnable {
 	private boolean regularSending;
 	
 	private RecentUpdater recentUpdater;
+	
+	private ArchiveList Sent;
+	
+	private MessageArchive ArcSent;
 
 	protected void pauseApp() {
 	}
@@ -48,6 +52,9 @@ public class StealthMS extends MIDlet implements Runnable {
 		sendingForm = new Sending(this);
 		aboutForm = new About(this);
 		recentList = new RecentList(this);
+		
+		//Ініціалізувати архів
+		ArcSent=new MessageArchive("Sent");
 
 		updateRecent();
 	}
@@ -132,6 +139,7 @@ public class StealthMS extends MIDlet implements Runnable {
 		}
 		if (!errorState) {
 			HistoryStorage.addNewMessage(message, phone);
+			ArcSent.SaveMessage(message,phone,-1);
 			sendingForm.setGaugeLabel("Отправлено");
 			sendingForm.setSuccessState();
 			updateRecent();
@@ -175,10 +183,12 @@ public class StealthMS extends MIDlet implements Runnable {
 	}
 
 	public void displayHistoryList(boolean reload) {
-		if (reload) {
-			historyList = new HistoryList(this);
-		}
-		Display.getDisplay(this).setCurrent(historyList);
+//		if (reload) {
+//			historyList = new HistoryList(this);
+//		}
+//		Display.getDisplay(this).setCurrent(historyList);
+		Sent=new ArchiveList(this,ArcSent);
+		Display.getDisplay(this).setCurrent(Sent);
 	}
 
 	public void displayHistoryView(String HPhone, String HMessage) {
