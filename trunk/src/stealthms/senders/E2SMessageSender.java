@@ -69,14 +69,14 @@ public class E2SMessageSender extends MessageSender {
 					default: resMsg=resMsg+" страниц";
 				}
 				sendingForm.setGaugeLabel(resMsg);
-			} else if (strNumPages.trim().equalsIgnoreCase("f")) {
+			} else if (strNumPages.trim().equals("f")) {
 				throw new IOException("Не отправлено!\nСообщение не принято оператором!");
 			} else {
 				throw new IOException("Не отправлено!\nОтвет: "+ServerAnswer);
 			}
-		} else if (ServerAnswer.trim().equalsIgnoreCase("wrong")) {
+		} else if (ServerAnswer.trim().equals("wrong")) {
 			throw new IOException("Не отправлено!\nНеправильный пароль!");
-		} else if (ServerAnswer.trim().equalsIgnoreCase("login")) {
+		} else if (ServerAnswer.trim().equals("login")) {
 			throw new IOException("Не отправлено!\nНеправильный логин!");
 		} else {
 			throw new IOException("Не отправлено!\nОтвет: "+ServerAnswer);
