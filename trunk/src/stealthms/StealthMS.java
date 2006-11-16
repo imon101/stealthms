@@ -22,7 +22,7 @@ public class StealthMS extends MIDlet implements Runnable {
 
 	private About aboutForm;
 
-	private HistoryList historyList;
+//	private HistoryList historyList;
 
 	private HistoryView historyView;
 	
@@ -139,7 +139,7 @@ public class StealthMS extends MIDlet implements Runnable {
 		}
 		if (!errorState) {
 			HistoryStorage.addNewMessage(message, phone);
-			ArcSent.SaveMessage(message,phone,-1);
+			ArcSent.SaveMessage(message, phone, -1);
 			sendingForm.setGaugeLabel("Отправлено");
 			sendingForm.setSuccessState();
 			updateRecent();
@@ -187,7 +187,7 @@ public class StealthMS extends MIDlet implements Runnable {
 //			historyList = new HistoryList(this);
 //		}
 //		Display.getDisplay(this).setCurrent(historyList);
-		Sent=new ArchiveList(this,ArcSent);
+		Sent = new ArchiveList(this, ArcSent);
 		Display.getDisplay(this).setCurrent(Sent);
 	}
 
