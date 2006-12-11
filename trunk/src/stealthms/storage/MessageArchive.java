@@ -2,21 +2,31 @@ package stealthms.storage;
 
 import java.io.*;
 import java.util.Hashtable;
+import java.util.Enumeration;
 import java.util.Vector;
 import javax.microedition.rms.*;
 import stealthms.utilities.DateFormatter;
+import stealthms.storage.MessageHeader;
+import stealthms.StealthMS;
+
+import javax.microedition.pim.*;
 
 public class MessageArchive {
 	
 	private RecordStore rsArchive;
+	
 	private RecordStore rsArchiveHeaders;
+	
 	private String rsName;
 	
-	public MessageArchive(String Name) {
-		rsName=Name;
+	private StealthMS midlet;
+	
+	public MessageArchive(StealthMS midlet, String Name) {
+		this.midlet = midlet;
+		rsName = Name;
 		try {
-			rsArchive=RecordStore.openRecordStore(rsName,true);
-			rsArchiveHeaders=RecordStore.openRecordStore(rsName+"_Headers",true);
+			rsArchive = RecordStore.openRecordStore(rsName, true);
+			rsArchiveHeaders = RecordStore.openRecordStore(rsName + "_Headers", true);
 		} catch (RecordStoreException ex) {
 		}
 	}
@@ -29,22 +39,41 @@ public class MessageArchive {
 		} catch (RecordStoreException ex) {
 		}
 		if (Index == -1) {
-			Index=recIndex;
+			Index = recIndex;
+		}
+		// reading name from address book
+		String FullName = midlet.searchName(Phone);
+		if (FullName.compareTo("") == 0) {
+			try {
+				PIM myPIM = PIM.getInstance();
+				ContactList myContactList = (ContactList) myPIM.openPIMList(PIM.CONTACT_LIST, PIM.READ_ONLY);
+				Contact searchContact = myContactList.createContact();
+				searchContact.addString(Contact.TEL, 0, Phone);
+				Enumeration contact = myContactList.items(searchContact);
+				if (contact.hasMoreElements()) {
+					Contact c = (Contact) contact.nextElement();
+					FullName = c.getString(Contact.FORMATTED_NAME, 0);
+				}
+			} catch (Exception e) {}
+		}
+		if (FullName.compareTo("") == 0) {
+			FullName = Phone;
 		}
 		// writing header
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		DataOutputStream outputStream=new DataOutputStream(baos);
+		DataOutputStream outputStream = new DataOutputStream(baos);
 		try {
 			outputStream.writeUTF(Phone);
 			DateFormatter dateFormatter = new DateFormatter();
 			outputStream.writeUTF(dateFormatter.formatCurrentDate());
-			int HeaderMsgLen=Message.length();
+			int HeaderMsgLen = Message.length();
 			if (HeaderMsgLen > 20)
 				HeaderMsgLen = 20;
-			String Msg=Message.trim().substring(0,HeaderMsgLen);
+			String Msg = Message.trim().substring(0, HeaderMsgLen);
 			outputStream.writeUTF(Msg);
+			outputStream.writeUTF(FullName);
 			byte[] bytes = baos.toByteArray();
-			if (rsArchive.getNextRecordID() <= Index) {
+			if (rsArchiveHeaders.getNextRecordID() <= Index) {
 				rsArchiveHeaders.addRecord(bytes, 0, bytes.length);
 			} else {
 				rsArchiveHeaders.setRecord(Index + 1, bytes, 0, bytes.length);
@@ -140,8 +169,8 @@ public class MessageArchive {
 		} catch (Exception ex) {
 		}
 		try {
-			rsArchive = RecordStore.openRecordStore(rsName,true);
-			rsArchiveHeaders=RecordStore.openRecordStore(rsName + "_Headers", true);
+			rsArchive = RecordStore.openRecordStore(rsName, true);
+			rsArchiveHeaders = RecordStore.openRecordStore(rsName + "_Headers", true);
 		} catch (RecordStoreException ex) {
 		}
 		int MsgCount = vecMessageHeaders.size();
@@ -161,28 +190,25 @@ public class MessageArchive {
 	
 	public Hashtable getHeaders() {
 		Hashtable htMessageHeaders = new Hashtable();
-		int MsgCount = 0;
+		int NextMsgNum = 0;
 		try {
-			MsgCount = rsArchiveHeaders.getNextRecordID() - 1;
-		} catch (Exception ex) {
-		}
-		for (int i = 0; i <= MsgCount; i++) {
+			NextMsgNum = rsArchiveHeaders.getNextRecordID();
+		} catch (Exception ex) {}
+		for (int i = 1; i < NextMsgNum; i++) {
 			try {
 				byte[] bytes = rsArchiveHeaders.getRecord(i);
 				ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
 				DataInputStream inputStream = new DataInputStream(bais);
 				String hPhone = "";
-				String hDate="";
-				String hHeader="";
-				try {
-					hPhone = inputStream.readUTF();
-					hDate = inputStream.readUTF();
-					hHeader = inputStream.readUTF();
-				} catch (Exception ex) {
-				}
-				htMessageHeaders.put(new Integer(i), hDate + ";" + hPhone + ";" + hHeader);
-			} catch (Exception ex) {
-			}
+				String hDate = "";
+				String hHeader = "";
+				String hName = "";
+				hPhone = inputStream.readUTF();
+				hDate = inputStream.readUTF();
+				hHeader = inputStream.readUTF();
+				hName = inputStream.readUTF();
+				htMessageHeaders.put(new Integer(i), new MessageHeader(hPhone, hDate, hHeader, hName));
+			} catch (Exception ex) {}
 		}
 		return htMessageHeaders;
 	}

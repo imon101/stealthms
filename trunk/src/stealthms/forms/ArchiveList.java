@@ -29,7 +29,7 @@ public class ArchiveList extends List implements CommandListener {
 	
 	private MessageArchive ArcSent;
 	
-	public ArchiveList(StealthMS midlet,MessageArchive Arc) {
+	public ArchiveList(StealthMS midlet, MessageArchive Arc) {
 		super("История", Choice.IMPLICIT);
 		this.midlet = midlet;
 		ArcSent = Arc;
@@ -50,9 +50,8 @@ public class ArchiveList extends List implements CommandListener {
 			midlet.displayMessage();
 		}
 		if (comm == delCommand) {
-			int Key=-1;
-			Key = Integer.parseInt(Keys.elementAt(getSelectedIndex()).toString());
-			ArcSent.DelMessage(Key);
+			Integer Key = (Integer) Keys.elementAt(getSelectedIndex());
+			ArcSent.DelMessage(Key.intValue());
 			RefreshList();
 		}
 		if (comm == delAllCommand) {
@@ -65,38 +64,30 @@ public class ArchiveList extends List implements CommandListener {
 		}
 		if (comm == List.SELECT_COMMAND) {
 			int selectedIndex = getSelectedIndex();
-			Integer Key = new Integer(0);
-			Key = Integer.valueOf(Keys.elementAt(selectedIndex).toString());
+			Integer Key = (Integer) Keys.elementAt(selectedIndex);
 			String Message = ArcSent.ReadMessage(Key.intValue());
 			// reading phone
-			String Header = htHeaders.get(Key).toString();
-//			hDate = str.substring(0,str.indexOf(";"));
-			int fDelim = Header.indexOf(";");
-			String hPhone = Header.substring(fDelim + 1, Header.indexOf(";", fDelim + 1));
-			midlet.displayHistoryView(hPhone, Message);
+			MessageHeader Header = (MessageHeader) htHeaders.get(Key);
+			midlet.displayHistoryView(Header.getName(), Message);
 		}
 	}
 	
 	private void RefreshList() {
-		while (size()>0)
+		while (size() > 0) {
 			delete(0);
+		}
 		Keys = new Vector();
-//		String hPhone;
 		String hDate;
 		String hMsgStart;
 		htHeaders = ArcSent.getHeaders();
 		Enumeration enHeaders = htHeaders.keys();
 		while (enHeaders.hasMoreElements()) {
-			Integer Key=new Integer(-1);
-			Key = Integer.valueOf(enHeaders.nextElement().toString());
-			String str = htHeaders.get(Key).toString();
-			int PhoneSep = str.indexOf(";");
-			hDate=str.substring(0, PhoneSep);
-//			hPhone=str.substring(PhoneSep+1);
-			hMsgStart = str.substring(str.indexOf(";", PhoneSep + 1) + 1);
+			Integer Key = (Integer) enHeaders.nextElement();
+			MessageHeader hdr = (MessageHeader) htHeaders.get(Key);
+			hDate = hdr.getDate();
+			hMsgStart = hdr.getMessage();
 			append(hDate + " " + hMsgStart, null);
 			Keys.addElement(Key);
 		}
 	}
-	
 }
