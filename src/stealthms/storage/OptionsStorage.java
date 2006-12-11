@@ -9,8 +9,6 @@ import javax.microedition.rms.*;
 public class OptionsStorage {
 	private static Hashtable options;
 	
-	private static String[] Titles;
-	
 	public static void saveSettings() {
 		RecordStore recordStore;
 		try {
@@ -28,9 +26,6 @@ public class OptionsStorage {
 				outputStream.writeUTF(currentKey);
 				outputStream.writeUTF(currentValue);
 			}
-			for (int i = 0; i < 15; i++) {
-				outputStream.writeUTF(Titles[i]);
-			}
 			byte[] bytes = baos.toByteArray();
 			if (recordStore.getNumRecords() == 0)
 				recordStore.addRecord(bytes, 0, bytes.length);
@@ -44,11 +39,10 @@ public class OptionsStorage {
 	public static void loadSettings() {
 		RecordStore recordStore;
 		options = new Hashtable();
-		Titles = new String[15];
 		try {
 			recordStore = RecordStore.openRecordStore("SMS", false);
 		} catch (RecordStoreException rse) {
-			setUser("somebody@ukr.net");
+			setUser("somebody@yandex.ru");
 			setUrl("smtp.umc.ua");
 			setSMUser("");
 			setSMPass("");
@@ -56,15 +50,12 @@ public class OptionsStorage {
 			setCopy("");
 			setLastTitle(-1);
 			setFamily("");
-			setHttp("8063%");
+			setHttp("8063%;8093%");
 			setTranslitStat(1);
 			setAuthLogin(0);
 			setE2S("");
 			setE2SUser("");
 			setE2SPass("");
-			for (int i = 0; i < 15; i++) {
-				Titles[i] = "";
-			}
 			saveSettings();
 			return;
 		}
@@ -77,9 +68,6 @@ public class OptionsStorage {
 				String key = inputStream.readUTF();
 				String value = inputStream.readUTF();
 				options.put(key, value);
-			}
-			for (int i = 0; i < 15; i++) {
-				Titles[i] = inputStream.readUTF();
 			}
 			inputStream.close();
 			recordStore.closeRecordStore();
@@ -172,14 +160,6 @@ public class OptionsStorage {
 	
 	public static void setAuthLogin(int authlogin) {
 		options.put("AuthLogin", Integer.toString(authlogin));
-	}
-	
-	public static String[] getTitles() {
-		return Titles;
-	}
-	
-	public static void setTitles(String[] titles) {
-		Titles = titles;
 	}
 	
 	public static String getE2SUser() {

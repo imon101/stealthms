@@ -4,8 +4,7 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 import stealthms.forms.RecentList;
-import stealthms.storage.HistoryStorage;
-import stealthms.storage.OptionsStorage;
+import stealthms.storage.*;
 
 public class RecentUpdater extends Thread {
 	
@@ -13,36 +12,32 @@ public class RecentUpdater extends Thread {
 	
 	private RecentList recentForm;
 	
-	public RecentUpdater(RecentList recentForm) {
+	private MessageArchive archive;
+	
+	public RecentUpdater(RecentList recentForm, MessageArchive arc) {
 		this.recentForm = recentForm;
+		this.archive = arc;
 		this.ready = false;
 	}
 	
 	public void run() {
 		setReady(false);
-		String[] Titles = OptionsStorage.getTitles();
-		int LastTitle = OptionsStorage.getLastTitle();
 		Vector phones = new Vector();
-		for (int i = LastTitle; i >= 0; i--) {
-			HistoryStorage.loadMessage(i);
-			yield();
-			if (Titles[i].compareTo("") != 0 && !phones.contains(HistoryStorage.getHPhone())) {
-				phones.addElement(HistoryStorage.getHPhone());
+		Vector displayNames = new Vector();
+		for (Enumeration e = archive.getHeaders().elements(); e.hasMoreElements() && phones.size() < 21;) {
+			MessageHeader header = (MessageHeader) e.nextElement();
+			if (!phones.contains(header.getPhone())) {
+				phones.addElement(header.getPhone());
+				displayNames.addElement(header.getName());
 			}
-		}
-		for (int i = 14; i > LastTitle; i--) {
-			HistoryStorage.loadMessage(i);
 			yield();
-			if (Titles[i].compareTo("") != 0 && !phones.contains(HistoryStorage.getHPhone())) {
-				phones.addElement(HistoryStorage.getHPhone());
-			}
-		}
-		for (int i = 0; i < recentForm.size(); i++) {
-			recentForm.delete(i);
 		}
 		yield();
+		recentForm.clearForm();
+		yield();
+		Enumeration d = displayNames.elements();
 		for (Enumeration e = phones.elements(); e.hasMoreElements();) {
-			recentForm.append((String)e.nextElement(), null);
+			recentForm.addPhone((String)e.nextElement(), (String)d.nextElement());
 			yield();
 		}
 		setReady(recentForm.size() > 0);

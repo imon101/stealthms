@@ -22,8 +22,6 @@ public class StealthMS extends MIDlet implements Runnable {
 
 	private About aboutForm;
 
-//	private HistoryList historyList;
-
 	private HistoryView historyView;
 	
 	private RecentList recentList;
@@ -35,7 +33,7 @@ public class StealthMS extends MIDlet implements Runnable {
 	private ArchiveList Sent;
 	
 	private MessageArchive ArcSent;
-
+	
 	protected void pauseApp() {
 	}
 
@@ -53,8 +51,8 @@ public class StealthMS extends MIDlet implements Runnable {
 		aboutForm = new About(this);
 		recentList = new RecentList(this);
 		
-		//Ініціалізувати архів
-		ArcSent=new MessageArchive("Sent");
+		// initialize archive
+		ArcSent = new MessageArchive(this, "Sent");
 
 		updateRecent();
 	}
@@ -92,7 +90,6 @@ public class StealthMS extends MIDlet implements Runnable {
 		errorState = false;
 		String message = messageText.getString();
 		String phone = phoneText.getString().trim();
-//		boolean httpMode = OptionsStorage.getUrl().startsWith("http://");
 		boolean httpMode = isInMask(phone, OptionsStorage.getHttp());
 		boolean E2SMode = isInMask(phone, OptionsStorage.getE2S());
 		try {
@@ -138,7 +135,6 @@ public class StealthMS extends MIDlet implements Runnable {
 			}
 		}
 		if (!errorState) {
-			HistoryStorage.addNewMessage(message, phone);
 			ArcSent.SaveMessage(message, phone, -1);
 			sendingForm.setGaugeLabel("Отправлено");
 			sendingForm.setSuccessState();
@@ -183,11 +179,9 @@ public class StealthMS extends MIDlet implements Runnable {
 	}
 
 	public void displayHistoryList(boolean reload) {
-//		if (reload) {
-//			historyList = new HistoryList(this);
-//		}
-//		Display.getDisplay(this).setCurrent(historyList);
-		Sent = new ArchiveList(this, ArcSent);
+		if (reload) {
+			Sent = new ArchiveList(this, ArcSent);
+		}
 		Display.getDisplay(this).setCurrent(Sent);
 	}
 
@@ -217,16 +211,11 @@ public class StealthMS extends MIDlet implements Runnable {
 	}
 	
 	public void updateRecent() {
-		recentUpdater = new RecentUpdater(recentList);
+		recentUpdater = new RecentUpdater(recentList, ArcSent);
 		recentUpdater.setPriority(Thread.MIN_PRIORITY);
-		recentUpdater.start();	
+		recentUpdater.start();
 	}
 	
-	public void setPhoneAndSend(String phone) {
-		phoneText.setString(phone);	
-		displaySending(false);
-	}
-
 	public boolean isErrorState() {
 		return errorState;
 	}
@@ -241,5 +230,17 @@ public class StealthMS extends MIDlet implements Runnable {
 
 	public void setRegularSending(boolean regularSending) {
 		this.regularSending = regularSending;
+	}
+	
+	public String getPhone() {
+		return phoneText.getString().trim();
+	}
+	
+	public void setPhone(String phone) {
+		phoneText.setString(phone);
+	}
+	
+	public String searchName(String phone) {
+		return recentList.searchName(phone);
 	}
 }
