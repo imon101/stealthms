@@ -5,5 +5,5 @@ StealthMS is J2ME midlet for sending cheap SMS through operators email2sms gates
 = Details =
 
 Instructions for midlet configuration are available in:
-  * Russian
-  * English
+  * [Russian]
+  * [English]
