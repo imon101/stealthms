@@ -52,7 +52,7 @@ public class Options extends Form implements CommandListener {
 		append(smpassTextField);
 		gatesTextField = new TextField("Гейты", "", 500, TextField.ANY);
 		append(gatesTextField);
-		copyTextField = new TextField("Копия", "", 15, TextField.PHONENUMBER);
+		copyTextField = new TextField("Копия", "", 15, TextField.ANY);
 		append(copyTextField);
 		familyTextField = new TextField("Семья", "", 100, TextField.ANY);
 		append(familyTextField);
