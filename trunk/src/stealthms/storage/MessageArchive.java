@@ -43,9 +43,9 @@ public class MessageArchive {
 		if (Index == -1) {
 			Index = recIndex;
 		}
-//		reading name from address book
+		// reading name from address book
 		String FullName = midlet.searchName(Phone);
-//		#ifdef JSR75
+		//#ifdef JSR75
 		if (FullName.compareTo("") == 0) {
 			try {
 				PIM myPIM = PIM.getInstance();
@@ -59,11 +59,11 @@ public class MessageArchive {
 				}
 			} catch (Exception e) {}
 		}
-//		#endif
+		//#endif
 		if (FullName.compareTo("") == 0) {
 			FullName = Phone;
 		}
-//		writing header
+		// writing header
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		DataOutputStream outputStream = new DataOutputStream(baos);
 		try {
@@ -85,7 +85,7 @@ public class MessageArchive {
 			outputStream.close();
 		} catch (Exception e) {
 		}
-//		writing message
+		// writing message
 		baos = new ByteArrayOutputStream();
 		outputStream = new DataOutputStream(baos);
 		try {
