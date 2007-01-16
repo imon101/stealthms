@@ -45,7 +45,7 @@ public class MessageArchive {
 		}
 		// reading name from address book
 		String FullName = midlet.searchName(Phone);
-		//#ifdef JSR75
+		//#ifdef MIDP2JSR75
 		if (FullName.compareTo("") == 0) {
 			try {
 				PIM myPIM = PIM.getInstance();
