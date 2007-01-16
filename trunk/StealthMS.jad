@@ -1,7 +1,7 @@
 MIDlet-Version: 1.71
 MIDlet-Vendor: StealthMS Community
 MIDlet-Jar-URL: StealthMS.jar
-MicroEdition-Configuration: CLDC-1.1
+MicroEdition-Configuration: CLDC-1.0
 MicroEdition-Profile: MIDP-2.0
 MIDlet-1: StealthMS,StealthMS.png,stealthms.StealthMS
 MIDlet-Name: StealthMS
