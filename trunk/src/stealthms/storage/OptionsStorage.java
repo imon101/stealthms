@@ -46,7 +46,7 @@ public class OptionsStorage {
 			setUrl("smtp.umc.ua");
 			setSMUser("");
 			setSMPass("");
-			setGates("8050:38050%@sms.umc.ua;8095:38095%@sms.umc.ua;8066:38066%@sms.umc.ua;8099:38099%@sms.umc.ua;8097:38097%@sms.kyivstar.net;8067:38067%@sms.kyivstar.net;8096:38096%@sms.kyivstar.net;8068:38068%@sms.beeline.ua");
+			setGates("8050:38050%@sms.umc.ua;8095:38095%@sms.umc.ua;8066:38066%@sms.umc.ua;8099:38099%@sms.umc.ua;8097:38097%@sms.kyivstar.net;8067:38067%@sms.kyivstar.net;8096:38096%@sms.kyivstar.net;8098:38098%@sms.kyivstar.net;8068:38068%@sms.beeline.ua");
 			setCopy("");
 			setLastTitle(-1);
 			setFamily("");
@@ -183,5 +183,13 @@ public class OptionsStorage {
 	
 	public static void setE2S(String mask) {
 		options.put("E2S", mask);
+	}
+	
+	public static String getLastMessage() {
+		return (String)options.get("LastMessage");		
+	}
+	
+	public static void setLastMessage(String message) {
+		options.put("LastMessage", message);
 	}
 }
