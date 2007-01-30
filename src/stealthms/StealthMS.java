@@ -61,6 +61,9 @@ public class StealthMS extends MIDlet implements Runnable {
 	}
 
 	public void exitRequested() {
+		if (!OptionsStorage.getLastMessage().equals("")) {
+			OptionsStorage.saveSettings();			
+		}
 		destroyApp(false);
 		notifyDestroyed();
 	}
@@ -138,9 +141,11 @@ public class StealthMS extends MIDlet implements Runnable {
 			ArcSent.SaveMessage(message, phone, -1);
 			sendingForm.setGaugeLabel("Отправлено");
 			sendingForm.setSuccessState();
+			OptionsStorage.setLastMessage("");
 			updateRecent();
 		} else {
 			sendingForm.setErrorState();
+			OptionsStorage.setLastMessage(messageText.getString());
 		}
 	}
 
@@ -150,6 +155,11 @@ public class StealthMS extends MIDlet implements Runnable {
 	}
 
 	public void displayMessage() {
+		if (!OptionsStorage.getLastMessage().equals("")) {
+			messageText.setString(OptionsStorage.getLastMessage());
+			OptionsStorage.setLastMessage("");
+			OptionsStorage.saveSettings();
+		}
 		Display.getDisplay(this).setCurrent(messageText);
 	}
 
