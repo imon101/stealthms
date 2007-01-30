@@ -56,6 +56,7 @@ public class OptionsStorage {
 			setE2S("");
 			setE2SUser("");
 			setE2SPass("");
+			setLastMessage("");
 			saveSettings();
 			return;
 		}
@@ -186,7 +187,7 @@ public class OptionsStorage {
 	}
 	
 	public static String getLastMessage() {
-		return (String)options.get("LastMessage");		
+		return (options.get("LastMessage") != null)?(String)options.get("LastMessage"):"";		
 	}
 	
 	public static void setLastMessage(String message) {
