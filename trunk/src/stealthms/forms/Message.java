@@ -2,6 +2,7 @@ package stealthms.forms;
 
 import javax.microedition.lcdui.*;
 import stealthms.StealthMS;
+import stealthms.storage.MessageArchive;
 
 public class Message extends TextBox implements CommandListener {
 	private StealthMS midlet;
@@ -16,19 +17,23 @@ public class Message extends TextBox implements CommandListener {
 
 	private Command histCommand;
 
+	private Command loadLastMsgCommand;
+
 	public Message(StealthMS midlet) {
-		super("Сообщение", "", 700, TextField.INITIAL_CAPS_SENTENCE); // INITIAL_CAPS_SENTENCE
+		super("Сообщение", "", 700, 0x200000); // INITIAL_CAPS_SENTENCE
 		this.midlet = midlet;
 		exitCommand = new Command("Выход", Command.BACK, 3);
 		optsCommand = new Command("Настройки", Command.OK, 1);
 		abotCommand = new Command("О программе", Command.OK, 2);
 		histCommand = new Command("Отправленные", Command.OK, 1);
 		sendCommand = new Command("Передать", Command.OK, 0);
+		loadLastMsgCommand = new Command("Последнее", Command.ITEM, 5);
 		addCommand(exitCommand);
 		addCommand(optsCommand);
 		addCommand(abotCommand);
 		addCommand(histCommand);
 		addCommand(sendCommand);
+		addCommand(loadLastMsgCommand);
 		setCommandListener(this);
 	}
 
@@ -52,6 +57,15 @@ public class Message extends TextBox implements CommandListener {
 				midlet.displayRecent();
 			}
 		}
+		if (comm == loadLastMsgCommand) {
+			String Msg=MessageArchive.LoadLastMsg();
+                        if (Msg.trim().length()>0) {
+                                setString(Msg);
+                        }
+		}
+                if (comm!=loadLastMsgCommand) {
+                        MessageArchive.SaveLastMessage(getString());
+                }
 	}
 
 }
