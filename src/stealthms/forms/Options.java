@@ -46,27 +46,27 @@ public class Options extends Form implements CommandListener {
 		append(userTextField);
 		urlTextField = new TextField("Сервер", "", 50, TextField.URL);
 		append(urlTextField);
-		smuserTextField = new TextField("Логин", "", 20, TextField.ANY);
+		smuserTextField = new TextField("Логин", "", 50, TextField.ANY);
 		append(smuserTextField);
-		smpassTextField = new TextField("Пароль", "", 20, TextField.PASSWORD);
+		smpassTextField = new TextField("Пароль", "", 50, TextField.PASSWORD);
 		append(smpassTextField);
-		gatesTextField = new TextField("Гейты", "", 500, TextField.ANY);
+		gatesTextField = new TextField("Гейты", "", 1000, TextField.ANY);
 		append(gatesTextField);
 		copyTextField = new TextField("Копия", "", 15, TextField.ANY);
 		append(copyTextField);
-		familyTextField = new TextField("Семья", "", 100, TextField.ANY);
+		familyTextField = new TextField("Семья", "", 1000, TextField.ANY);
 		append(familyTextField);
-		httpTextField = new TextField("Через KS", "", 100, TextField.ANY);
+		httpTextField = new TextField("Через KS", "", 1000, TextField.ANY);
 		append(httpTextField);
-		E2STextField = new TextField("Через E2S", "", 100, TextField.ANY);
+		E2STextField = new TextField("Через E2S", "", 1000, TextField.ANY);
 		append(E2STextField);
 		E2SUserField = new TextField("Логин E2S", "", 50, TextField.ANY);
 		append(E2SUserField);
-		E2SPassField = new TextField("Пароль E2S", "", 20, TextField.PASSWORD);
+		E2SPassField = new TextField("Пароль E2S", "", 50, TextField.PASSWORD);
 		append(E2SPassField);
 		
 		String[] trOptions = {"Выкл", "Вкл"};
-		int ChoiceType = ChoiceGroup.POPUP;
+		int ChoiceType = 4; //ChoiceGroup.POPUP
 		if (System.getProperty("microedition.profiles").compareTo("MIDP-1.0") == 0) {
 			ChoiceType = ChoiceGroup.EXCLUSIVE;
 		}
