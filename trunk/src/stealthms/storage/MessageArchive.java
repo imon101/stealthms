@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.Hashtable;
 import java.util.Enumeration;
 import java.util.Vector;
+import javax.microedition.lcdui.Alert;
 import javax.microedition.rms.*;
 import stealthms.utilities.DateFormatter;
 import stealthms.storage.MessageHeader;
@@ -25,38 +26,42 @@ public class MessageArchive {
         
         private StealthMS midlet;
         
-        public static void SaveLastMessage(String message) {
-                if (message.trim().length()>0) {
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        DataOutputStream outputStream = new DataOutputStream(baos);
-                        try {
-                                rsLastMsg=RecordStore.openRecordStore("LastMsg",true);
-                                outputStream.writeUTF(message);
-                                byte[] bytes = baos.toByteArray();
-                                if (rsLastMsg.getNextRecordID() <= 1) {
-                                        rsLastMsg.addRecord(bytes, 0, bytes.length);
-                                } else {
-                                        rsLastMsg.setRecord(1, bytes, 0, bytes.length);
-                                }
-                                outputStream.close();
-                                rsLastMsg.closeRecordStore();
-                        } catch (Exception ex) {
-                        }
+        public static void SaveLastMessage(String message) throws Exception {
+                if (message.length()>0) {
+                        rsLastMsg=RecordStore.openRecordStore("LastMessage",true);
+                        ByteArrayOutputStream bytearrayoutputstream;
+                        DataOutputStream dataoutputstream;
+                        bytearrayoutputstream = new ByteArrayOutputStream();
+                        dataoutputstream = new DataOutputStream(bytearrayoutputstream);
+                        byte abyte0[];
+                        dataoutputstream.writeUTF(message);
+                        dataoutputstream.close();
+                        abyte0=bytearrayoutputstream.toByteArray();
+                        while (rsLastMsg.getNextRecordID()<2) rsLastMsg.addRecord(abyte0,0,abyte0.length);
+                        rsLastMsg.setRecord(1,abyte0,0,abyte0.length);
+                        rsLastMsg.closeRecordStore();
                 }
         }
         
-        public static String LoadLastMsg() {
-                String Message = new String();
-                try {
-                        rsLastMsg=RecordStore.openRecordStore("LastMsg",true);
-                        byte[] bytes = rsLastMsg.getRecord(1);
-                        ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-                        DataInputStream inputStream = new DataInputStream(bais);
-                        Message = inputStream.readUTF();
-                        rsLastMsg.closeRecordStore();
-                } catch (Exception ex) {
-                }
-                return Message;
+        public static String LoadLastMsg() throws Exception {
+                String Ms = new String();
+                Ms=" ";
+                ByteArrayOutputStream bytearrayoutputstream;
+                DataOutputStream dataoutputstream;
+                bytearrayoutputstream = new ByteArrayOutputStream();
+                dataoutputstream = new DataOutputStream(bytearrayoutputstream);
+                byte abyte0[];
+                dataoutputstream.writeUTF(Ms);
+                dataoutputstream.close();
+                abyte0=bytearrayoutputstream.toByteArray();
+                rsLastMsg=RecordStore.openRecordStore("LastMessage",true);
+                while (rsLastMsg.getNextRecordID()<2)
+                        rsLastMsg.addRecord(abyte0,0,abyte0.length);
+                byte bMess[] = rsLastMsg.getRecord(1);
+                DataInputStream datainputstream = new DataInputStream(new ByteArrayInputStream(bMess));
+                Ms=datainputstream.readUTF();
+                rsLastMsg.closeRecordStore();
+                return Ms;
         }
         
         public MessageArchive(StealthMS midlet, String Name) {
