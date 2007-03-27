@@ -142,6 +142,8 @@ public class StealthMS extends MIDlet implements Runnable {
                                 sendingForm.setGaugeLabel("Ошибка: " + error);
                                 errorState = true;
                                 AlertType.ERROR.playSound(Display.getDisplay(this));
+                        } else {
+                                ShowError(e.getMessage());
                         }
                 }
                 if (!errorState) {
