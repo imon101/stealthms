@@ -13,7 +13,7 @@ public class About extends Form implements CommandListener {
 		super("О программе");
 		this.midlet = midlet;
 		
-		append("StealthMS 1.73c\n"
+		append("StealthMS 1.73d\n"
 				//#ifdef MIDP2JSR75
 //# 				+ "Версия MIDP2/JSR75\n"
 				//#elifdef MIDP2
