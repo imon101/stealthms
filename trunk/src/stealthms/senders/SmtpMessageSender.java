@@ -113,8 +113,15 @@ public class SmtpMessageSender extends MessageSender {
 			Url = Url + ":25";
 		}
 		try {
-			Connection con = Connector.open("socket://" + Url,
+//			Connection con = Connector.open("socket://" + Url,
+//					Connector.READ_WRITE);
+//#ifdef MIDP1
+//#                         StreamConnection con = (StreamConnection) Connector.open("socket://" + Url,
+//# 					Connector.READ_WRITE);
+//#elifndef MIDP1
+                        SocketConnection con = (SocketConnection) Connector.open("socket://" + Url,
 					Connector.READ_WRITE);
+//#endif
 			sendingForm.setGaugeValue(3);
 			InputStream is = ((InputConnection) con).openInputStream();
 			OutputStream os = ((OutputConnection) con).openOutputStream();
@@ -171,6 +178,8 @@ public class SmtpMessageSender extends MessageSender {
 			throw (new Exception("Указанный сервер и/или порт некорректны"));
 		} catch (IOException e) {
 			throw (new Exception("Произошла ошибка ввода-вывода"));
+		} catch (SecurityException e) {
+			throw (new Exception("Нет доступа к интернету"));
 		} catch (Exception e) {
 			throw e;
 		}
