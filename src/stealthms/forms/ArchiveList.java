@@ -22,6 +22,8 @@ public class ArchiveList extends List implements CommandListener {
 	private Command delAllCommand;
 	
 	private Command optimizeCommand;
+        
+        private Command last50Command;
 	
 	private Hashtable htHeaders;
 	
@@ -42,6 +44,8 @@ public class ArchiveList extends List implements CommandListener {
 		addCommand(delAllCommand);
 		optimizeCommand = new Command("Оптимизировать", Command.ITEM, 3);
 		addCommand(optimizeCommand);
+		last50Command = new Command("Оставить 50", Command.ITEM, 4);
+		addCommand(last50Command);
 		setCommandListener(this);
 	}
 	
@@ -70,6 +74,10 @@ public class ArchiveList extends List implements CommandListener {
 			MessageHeader Header = (MessageHeader) htHeaders.get(Key);
 			midlet.displayHistoryView(Header.getName(), Message);
 		}
+                if (comm == last50Command) {
+                        ArcSent.DelOldMessages(50);
+                        RefreshList();
+                }
 	}
 	
 	private void RefreshList() {
