@@ -5,6 +5,11 @@ import java.util.Hashtable;
 import java.util.Enumeration;
 import java.util.Vector;
 import javax.microedition.lcdui.Alert;
+import javax.microedition.lcdui.AlertType;
+import javax.microedition.lcdui.Command;
+import javax.microedition.lcdui.CommandListener;
+import javax.microedition.lcdui.Displayable;
+import javax.microedition.lcdui.Image;
 import javax.microedition.rms.*;
 import stealthms.utilities.DateFormatter;
 import stealthms.storage.MessageHeader;
@@ -257,4 +262,76 @@ public class MessageArchive {
                 }
                 return htMessageHeaders;
         }
+        
+        public void DelOldMessages(int LeaveCount) {
+                Vector vecMessageHeaders = new Vector();
+                Vector vecMessages = new Vector();
+                try {
+                        RecordEnumeration enHeaders=rsArchiveHeaders.enumerateRecords(null, null, false);
+                        while (enHeaders.hasNextElement()) {
+                                try {
+                                        vecMessageHeaders.addElement(enHeaders.nextRecord());
+                                } catch (InvalidRecordIDException ex) {
+                                } catch (RecordStoreException ex) {
+                                }
+                        }
+                } catch (RecordStoreNotOpenException ex) {
+                        midlet.ShowError("Архив поврежден и сейчас будет очищен.");
+                        try {
+                                rsArchive.closeRecordStore();
+                                rsArchiveHeaders.closeRecordStore();
+                        } catch (Exception ex2) {
+                        }
+                        try {
+                                RecordStore.deleteRecordStore(rsName);
+                                RecordStore.deleteRecordStore(rsName + "_Headers");
+                        } catch (Exception ex3) {
+                        }
+                        try {
+                                rsArchive = RecordStore.openRecordStore(rsName, true);
+                                rsArchiveHeaders = RecordStore.openRecordStore(rsName + "_Headers", true);
+                        } catch (Exception ex4) {
+                        }
+                        return;
+                }
+                try {
+                        RecordEnumeration enMessages = rsArchive.enumerateRecords(null, null, false);
+                        while (enMessages.hasNextElement()) {
+                                try {
+                                        vecMessages.addElement(enMessages.nextRecord());
+                                } catch (InvalidRecordIDException ex) {
+                                } catch (RecordStoreException ex) {
+                                }
+                        }
+                } catch (RecordStoreNotOpenException ex) {
+                }
+                try {
+                        rsArchive.closeRecordStore();
+                        rsArchiveHeaders.closeRecordStore();
+                        RecordStore.deleteRecordStore(rsName);
+                        RecordStore.deleteRecordStore(rsName + "_Headers");
+                } catch (Exception ex) {
+                }
+                try {
+                        rsArchive = RecordStore.openRecordStore(rsName, true);
+                        rsArchiveHeaders = RecordStore.openRecordStore(rsName + "_Headers", true);
+                } catch (RecordStoreException ex) {
+                }
+                int MsgCount = vecMessageHeaders.size();
+                if (LeaveCount>=MsgCount)
+                        LeaveCount=MsgCount+1;
+                for (int i = MsgCount-(LeaveCount-1); i < MsgCount; i++) {
+                        byte [] MsgHeader = (byte[]) vecMessageHeaders.elementAt(i);
+                        try {
+                                rsArchiveHeaders.addRecord(MsgHeader, 0, MsgHeader.length);
+                        } catch (Exception ex) {
+                        }
+                        byte[] Msg = (byte[]) vecMessages.elementAt(i);
+                        try {
+                                rsArchive.addRecord(Msg, 0, Msg.length);
+                        } catch (Exception ex) {
+                        }
+                }
+        }
+        
 }

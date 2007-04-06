@@ -20,7 +20,13 @@ public class Message extends TextBox implements CommandListener {
         private Command loadLastMsgCommand;
         
         public Message(StealthMS midlet) {
-                super("Сообщение", "", 700, 0x200000); // INITIAL_CAPS_SENTENCE
+                super("Сообщение", "", 700, TextField.ANY);
+//#if MIDP1
+//#                 int tfConstraints=TextField.ANY;
+//#else
+                int tfConstraints=TextField.ANY|TextField.INITIAL_CAPS_SENTENCE;
+//#endif
+                setConstraints(tfConstraints);
                 this.midlet = midlet;
                 exitCommand = new Command("Выход", Command.BACK, 3);
                 optsCommand = new Command("Настройки", Command.OK, 1);

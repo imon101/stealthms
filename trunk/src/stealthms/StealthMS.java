@@ -155,7 +155,7 @@ public class StealthMS extends MIDlet implements Runnable {
                         OptionsStorage.setLastMessage(messageText.getString());
                 }
         }
-
+        
         public void displayMessage(String message) {
                 messageText.setString(message);
                 Display.getDisplay(this).setCurrent(messageText);
@@ -272,4 +272,5 @@ public class StealthMS extends MIDlet implements Runnable {
                 disp.setCurrent(alert,disp.getCurrent());
                 AlertType.ERROR.playSound(Display.getDisplay(this));
         }
+        
 }
