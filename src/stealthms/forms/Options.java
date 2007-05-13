@@ -31,6 +31,8 @@ public class Options extends Form implements CommandListener {
 
 	private TextField E2SPassField;
 
+        private TextField CountryPrefixField;
+
 	private ChoiceGroup Translit;
 	
 	private ChoiceGroup AuthType;
@@ -80,7 +82,10 @@ public class Options extends Form implements CommandListener {
 		String[] auOptions = {"PLAIN", "LOGIN"};
 		AuthType = new ChoiceGroup("Авторизация", ChoiceType, auOptions, null);	
 		append(AuthType);
-		
+
+		CountryPrefixField = new TextField("Код страны", "", 50, TextField.ANY);
+		append(CountryPrefixField);
+                
 		// Adding commands
 		cancCommand = new Command("Отмена", Command.BACK, 0);
 		saveCommand = new Command("Сохранить", Command.OK, 0);
@@ -187,11 +192,13 @@ public class Options extends Form implements CommandListener {
 			OptionsStorage.setCopy(getCopy());
 			OptionsStorage.setFamily(getFamily());
 			OptionsStorage.setKS(getKS());
+			OptionsStorage.setMTS(getMTS());
 			OptionsStorage.setE2S(getE2S());
 			OptionsStorage.setE2SUser(getE2SUser());
 			OptionsStorage.setE2SPass(getE2SPass());
 			OptionsStorage.setTranslitStat(getTranslit());
 			OptionsStorage.setAuthLogin(getAuthLogin());
+			OptionsStorage.setCountryPrefix(getCountryPrefix());
 			OptionsStorage.saveSettings();
 			midlet.displayMessage();
 		}
@@ -223,4 +230,13 @@ public class Options extends Form implements CommandListener {
 	public void setE2SPass(String Pass) {
 		E2SPassField.setString(Pass);
 	}
+
+	private String getCountryPrefix() {
+		return CountryPrefixField.getString();
+	}
+
+	public void setCountryPrefix(String string) {
+		CountryPrefixField.setString(string);
+	}
+
 }

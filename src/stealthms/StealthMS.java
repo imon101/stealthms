@@ -118,7 +118,7 @@ public class StealthMS extends MIDlet implements Runnable {
                                 if (KSMode)
                                         HttpType="KS";
                                 if (MTSMode)
-                                        HttpType="KS";
+                                        HttpType="MTS";
                                 HttpMessageSender messSender = new HttpMessageSender();
                                 messSender.setMidlet(this);
                                 messSender.setUrl(OptionsStorage.getUrl());
@@ -199,6 +199,7 @@ public class StealthMS extends MIDlet implements Runnable {
                 optsForm.setE2SPass(OptionsStorage.getE2SPass());
                 optsForm.setTranslit(OptionsStorage.getTranslitStat());
                 optsForm.setAuthLogin(OptionsStorage.getAuthLogin());
+                optsForm.setCountryPrefix(OptionsStorage.getCountryPrefix());
                 Display.getDisplay(this).setCurrent(optsForm);
         }
         
