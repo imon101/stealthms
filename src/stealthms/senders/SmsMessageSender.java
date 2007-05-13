@@ -11,14 +11,14 @@ public class SmsMessageSender extends MessageSender {
 		sendingForm.setGaugeValue(0);
 		message = tf.translit(message, false);
 		sendingForm.setGaugeValue(2);
-		//#ifdef MIDP1
-		try {
-			Class.forName("com.siemens.mp.gsm.SMS");
-			com.siemens.mp.gsm.SMS.send(phone, message);
-			sendingForm.setGaugeValue(10);
-		} catch (Throwable t) {
-			throw new Exception("На Вашем телефоне отправка обычных SMS невозможна");
-		}
+		//#if MIDP1||MIDP1_RU
+//# 		try {
+//# 			Class.forName("com.siemens.mp.gsm.SMS");
+//# 			com.siemens.mp.gsm.SMS.send(phone, message);
+//# 			sendingForm.setGaugeValue(10);
+//# 		} catch (Throwable t) {
+//# 			throw new Exception("На Вашем телефоне отправка обычных SMS невозможна");
+//# 		}
 		//#else
 		String addr = "sms://" + phone;
 		MessageConnection conn = (MessageConnection) Connector.open(addr);

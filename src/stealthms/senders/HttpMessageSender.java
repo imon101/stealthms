@@ -1,6 +1,7 @@
 package stealthms.senders;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Random;
 
@@ -96,17 +97,20 @@ public class HttpMessageSender extends MessageSender {
 		
 	}
 	
-	private String getRandomCode() {
-		HttpRandom generator = new HttpRandom();
-		return String.valueOf(generator.nextHttpInt());
-	}
+ 	private String getRandomCode() {
+ 		HttpRandom generator = new HttpRandom();
+ 		return String.valueOf(generator.nextHttpInt());
+ 	}
 	
-	public void sendMessage(String message, String phone) throws Exception {
+	public void sendMessage(String message, String phone, String site) throws Exception {
 		TextFormatter tf = new TextFormatter();
 		int numParts = splitext(tf.translit(message, false), getNickFromMail(User).length());
 		try {
 			for (int i = 1; i <= numParts; i++) {
-				sendPart(phone,i);
+                                if (site=="KS")
+                                        sendPartKS(phone,i);
+                                if (site=="MTS")
+                                        sendPartMTS(phone,i);
 			}
 		} catch (SecurityException sex) {
 			throw new IOException("Нет доступа к интернету!");
@@ -120,20 +124,22 @@ public class HttpMessageSender extends MessageSender {
 		sendingForm.setGaugeValue(10);
 		hcon.close();
 	}
-	
-	private void sendPart(String phone,int curPart) throws Exception {
+
+	private void sendPartMTS(String phone,int curPart) throws Exception {
 		String number = phone.substring(phone.length() - 7);
 		String mobcode = phone.substring(phone.length() - 10, phone.length() - 7);
-		hcon = (HttpConnection) Connector.open("http://www.kyivstar.net/_sms.html");
+		hcon = (HttpConnection) Connector.open("http://www.tver.mts.ru/cgi-bin/cgi.exe?function=sms_send");
 		sendingForm.setGaugeValue(2);
 		hcon.setRequestMethod(HttpConnection.POST);
-		String rCode = getRandomCode();
-		String lat = (OptionsStorage.getTranslitStat() == 0) ? "0" : "1";
-		String request = "submitted=true&number=" + number + "&mobcode=" +
-			mobcode + "&antispam=" + rCode + "&lang=ru&lat=" + lat + "&message=" +
-			encode(getNickFromMail(User) + "\n" + messageParts[curPart]);
-		hcon.setRequestProperty("User-Agent", "Opera/9.00 (Windows NT 5.1; U; ru)");
-		hcon.setRequestProperty("Cookie", "code=" + rCode);
+                String request = "MMObjectType=0&MMObjectID=&To=7" + mobcode + number +
+			"&Msg=" + encode(getNickFromMail(User) + "\n" + messageParts[curPart])+
+                        "&count="+String.valueOf(messageParts[curPart].length())+
+                        "&Hour=23&Min=59&Day=31&Mon=12&Year=2008&Lang=2";
+		hcon.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 5.1; uk-UA; rv:1.8.1.1) Gecko/20061204 Firefox/2.0.0.1");
+                hcon.setRequestProperty("Accept", "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5");
+                hcon.setRequestProperty("Accept-Language", "uk-ua,ua;q=0.8,ru-ru;q=0.7,ru;q=0.5,en-us;q=0.3,en;q=0.2");
+                hcon.setRequestProperty("Accept-Charset", "windows-1251");
+                hcon.setRequestProperty("Referer", "http://www.tver.mts.ru/cgi-bin/cgi.exe?function=sms_send");
 		hcon.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 		hcon.setRequestProperty("Content-Length", String.valueOf(request.length()));
 		sendingForm.setGaugeValue(3);
@@ -143,30 +149,59 @@ public class HttpMessageSender extends MessageSender {
 		os.close();
 		sendingForm.setGaugeValue(7);
 		int status = hcon.getResponseCode();
-		if (status != HttpConnection.HTTP_MOVED_TEMP) {
+		hcon.close();
+		if (status != HttpConnection.HTTP_OK) {
 			throw new IOException("Неправильный код ответа " + Integer.toString(status));
 		}
 		sendingForm.setGaugeValue(9);
 	}
+ 	private void sendPartKS(String phone,int curPart) throws Exception {
+ 		String number = phone.substring(phone.length() - 7);
+ 		String mobcode = phone.substring(phone.length() - 10, phone.length() - 7);
+ 		hcon = (HttpConnection) Connector.open("http://www.kyivstar.net/_sms.html");
+ 		sendingForm.setGaugeValue(2);
+ 		hcon.setRequestMethod(HttpConnection.POST);
+ 		String rCode = getRandomCode();
+ 		String lat = (OptionsStorage.getTranslitStat() == 0) ? "0" : "1";
+ 		String request = "submitted=true&number=" + number + "&mobcode=" +
+ 			mobcode + "&antispam=" + rCode + "&lang=ru&lat=" + lat + "&message=" +
+ 			encode(getNickFromMail(User) + "\n" + messageParts[curPart]);
+ 		hcon.setRequestProperty("User-Agent", "Opera/9.00 (Windows NT 5.1; U; ru)");
+ 		hcon.setRequestProperty("Cookie", "code=" + rCode);
+ 		hcon.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+ 		hcon.setRequestProperty("Content-Length", String.valueOf(request.length()));
+ 		sendingForm.setGaugeValue(3);
+ 		OutputStream os = hcon.openOutputStream();
+ 		sendingForm.setGaugeValue(5);
+ 		os.write(request.getBytes());
+ 		os.close();
+ 		sendingForm.setGaugeValue(7);
+ 		int status = hcon.getResponseCode();
+ 		if (status != HttpConnection.HTTP_MOVED_TEMP) {
+ 			throw new IOException("Неправильный код ответа " + Integer.toString(status));
+ 		}
+ 		sendingForm.setGaugeValue(9);
+ 	}
+ 
+ 	private class HttpRandom extends Random {
+ 		public int nextHttpInt() {
+ 			return 1000 + nextIntWithLimit(9000);
+ 		}
+ 		
+ 		private int nextIntWithLimit(int n) {
+ 			if (n <= 0) {
+ 				throw new IllegalArgumentException("n must be positive");
+ 			}
+ 			if ((n & -n) == n) { // i.e., n is a power of 2
+ 				return (int)((n * (long)next(31)) >> 31);
+ 			}
+ 			int bits, val;
+ 			do {
+ 				bits = next(31);
+ 				val = bits % n;
+ 			} while (bits - val + (n-1) < 0);
+ 			return val;
+ 		}
+ 	}
 	
-	private class HttpRandom extends Random {
-		public int nextHttpInt() {
-			return 1000 + nextIntWithLimit(9000);
-		}
-		
-		private int nextIntWithLimit(int n) {
-			if (n <= 0) {
-				throw new IllegalArgumentException("n must be positive");
-			}
-			if ((n & -n) == n) { // i.e., n is a power of 2
-				return (int)((n * (long)next(31)) >> 31);
-			}
-			int bits, val;
-			do {
-				bits = next(31);
-				val = bits % n;
-			} while (bits - val + (n-1) < 0);
-			return val;
-		}
-	}
 }

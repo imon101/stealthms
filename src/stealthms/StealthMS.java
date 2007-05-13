@@ -89,7 +89,8 @@ public class StealthMS extends MIDlet implements Runnable {
                                 currentPercentPos = currentNum.length();
                         }
                         String currentPrefix = currentNum.substring(0, currentPercentPos);
-                        if (phone.startsWith(currentPrefix) || phone.startsWith("+3" + currentPrefix)) {
+                        String CountryPrefix = OptionsStorage.getCountryPrefix();
+                        if (phone.startsWith(currentPrefix) || phone.startsWith(CountryPrefix + currentPrefix)) {
                                 return true;
                         }
                 }
@@ -100,7 +101,11 @@ public class StealthMS extends MIDlet implements Runnable {
                 errorState = false;
                 String message = messageText.getString();
                 String phone = phoneText.getString().trim();
-                boolean httpMode = isInMask(phone, OptionsStorage.getHttp());
+                boolean httpMode = false;
+                boolean KSMode = isInMask(phone, OptionsStorage.getKS());
+                boolean MTSMode = isInMask(phone, OptionsStorage.getMTS());
+                if (KSMode||MTSMode)
+                        httpMode = true;
                 boolean E2SMode = isInMask(phone, OptionsStorage.getE2S());
                 try {
                         if (isInMask(phone, OptionsStorage.getFamily()) || isRegularSending()) {
@@ -109,12 +114,17 @@ public class StealthMS extends MIDlet implements Runnable {
                                 messSender.setSendingForm(sendingForm);
                                 messSender.sendMessage(message, phone);
                         } else if (httpMode) {
+                                String HttpType="";
+                                if (KSMode)
+                                        HttpType="KS";
+                                if (MTSMode)
+                                        HttpType="KS";
                                 HttpMessageSender messSender = new HttpMessageSender();
                                 messSender.setMidlet(this);
                                 messSender.setUrl(OptionsStorage.getUrl());
                                 messSender.setUser(OptionsStorage.getUser());
                                 messSender.setSendingForm(sendingForm);
-                                messSender.sendMessage(message, phone);
+                                messSender.sendMessage(message, phone, HttpType);
                         } else if (E2SMode) {
                                 E2SMessageSender messSender = new E2SMessageSender();
                                 messSender.setMidlet(this);
@@ -182,7 +192,8 @@ public class StealthMS extends MIDlet implements Runnable {
                 optsForm.setCopy(OptionsStorage.getCopy());
                 optsForm.setGates(OptionsStorage.getGates());
                 optsForm.setFamily(OptionsStorage.getFamily());
-                optsForm.setHttp(OptionsStorage.getHttp());
+                optsForm.setKS(OptionsStorage.getKS());
+                optsForm.setMTS(OptionsStorage.getMTS());
                 optsForm.setE2S(OptionsStorage.getE2S());
                 optsForm.setE2SUser(OptionsStorage.getE2SUser());
                 optsForm.setE2SPass(OptionsStorage.getE2SPass());

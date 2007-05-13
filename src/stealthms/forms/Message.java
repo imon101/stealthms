@@ -21,7 +21,7 @@ public class Message extends TextBox implements CommandListener {
         
         public Message(StealthMS midlet) {
                 super("Сообщение", "", 700, TextField.ANY);
-//#if MIDP1
+//#if MIDP1||MIDP1_RU
 //#                 int tfConstraints=TextField.ANY;
 //#else
                 int tfConstraints=TextField.ANY|TextField.INITIAL_CAPS_SENTENCE;
