@@ -21,9 +21,11 @@ public class Options extends Form implements CommandListener {
 	
 	private TextField familyTextField;
 	
-	private TextField httpTextField;
+	private TextField KSTextField;
 
-	private TextField E2STextField;
+	private TextField MTSTextField;
+
+        private TextField E2STextField;
 
 	private TextField E2SUserField;
 
@@ -56,8 +58,10 @@ public class Options extends Form implements CommandListener {
 		append(copyTextField);
 		familyTextField = new TextField("Семья", "", 1000, TextField.ANY);
 		append(familyTextField);
-		httpTextField = new TextField("Через KS", "", 1000, TextField.ANY);
-		append(httpTextField);
+		KSTextField = new TextField("Через KS", "", 1000, TextField.ANY);
+		append(KSTextField);
+		MTSTextField = new TextField("Через MTS", "", 1000, TextField.ANY);
+		append(MTSTextField);
 		E2STextField = new TextField("Через E2S", "", 1000, TextField.ANY);
 		append(E2STextField);
 		E2SUserField = new TextField("Логин E2S", "", 50, TextField.ANY);
@@ -141,13 +145,21 @@ public class Options extends Form implements CommandListener {
 		familyTextField.setString(user);
 	}
 	
-	public String getHttp() {
-		return httpTextField.getString();
+	public String getKS() {
+		return KSTextField.getString();
 	}
 
-	public void setHttp(String user) {
-		httpTextField.setString(user);
+	public void setKS(String user) {
+		KSTextField.setString(user);
 	}
+
+	public String getMTS() {
+		return MTSTextField.getString();
+	}
+
+        public void setMTS(String user) {
+		MTSTextField.setString(user);
+        }
 
 	public int getTranslit() {
 		return Translit.getSelectedIndex();
@@ -174,7 +186,7 @@ public class Options extends Form implements CommandListener {
 			OptionsStorage.setGates(getGates());
 			OptionsStorage.setCopy(getCopy());
 			OptionsStorage.setFamily(getFamily());
-			OptionsStorage.setHttp(getHttp());
+			OptionsStorage.setKS(getKS());
 			OptionsStorage.setE2S(getE2S());
 			OptionsStorage.setE2SUser(getE2SUser());
 			OptionsStorage.setE2SPass(getE2SPass());

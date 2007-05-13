@@ -27,11 +27,17 @@ public class TextFormatter {
 				case 'ã':
 					sb.append("g");
 					break;
+				case '´':
+					sb.append("g");
+					break;
 				case 'ä':
 					sb.append("d");
 					break;
 				case 'å':
 					sb.append("e");
+					break;
+				case 'º':
+					sb.append("ye");
 					break;
 				case '¸':
 					sb.append("yo");
@@ -44,6 +50,12 @@ public class TextFormatter {
 					break;
 				case 'è':
 					sb.append("i");
+					break;
+				case '³':
+					sb.append("i");
+					break;
+				case '¿':
+					sb.append("ji");
 					break;
 				case 'é':
 					sb.append("i");
@@ -133,6 +145,9 @@ public class TextFormatter {
 				case 'Å':
 					sb.append("E");
 					break;
+				case 'ª':
+					sb.append("Ye");
+					break;
 				case '¨':
 					sb.append("YO");
 					break;
@@ -144,6 +159,12 @@ public class TextFormatter {
 					break;
 				case 'È':
 					sb.append("I");
+					break;
+				case '²':
+					sb.append("I");
+					break;
+				case '¯':
+					sb.append("JI");
 					break;
 				case 'É':
 					sb.append("I");

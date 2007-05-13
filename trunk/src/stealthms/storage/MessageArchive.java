@@ -15,7 +15,7 @@ import stealthms.utilities.DateFormatter;
 import stealthms.storage.MessageHeader;
 import stealthms.StealthMS;
 
-//#ifdef MIDP2JSR75
+//#if MIDP2JSR75||MIDP2JSR75_RU
 //# import javax.microedition.pim.*;
 //#endif
 
@@ -91,7 +91,7 @@ public class MessageArchive {
                 }
                 // reading name from address book
                 String FullName = midlet.searchName(Phone);
-                //#ifdef MIDP2JSR75
+                //#if MIDP2JSR75||MIDP2JSR75_RU
 //#                 if (FullName.compareTo("") == 0) {
 //#                         try {
 //#                                 PIM myPIM = PIM.getInstance();

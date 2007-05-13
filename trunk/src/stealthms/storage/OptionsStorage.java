@@ -46,17 +46,27 @@ public class OptionsStorage {
 			setUrl("smtp.umc.ua");
 			setSMUser("");
 			setSMPass("");
+//#if RU
+//#                         setGates("960:7960%@sms.beemail.ru;903:7903%@sms.beemail.ru;905:7905%@sms.beemail.ru;906:7906%@sms.beemail.ru;909:7909%@sms.beemail.ru;961:7961%@sms.beemail.ru;962:7962%@sms.beemail.ru;963:7963%@sms.beemail.ru;917:7917%@volgase.mts.ru;919:7919%@volgase.mts.ru;927:7927%@sms.mgsm.ru;904:7904%@smsline.bashcell.com;913:7913%@sms.mtslife.ru;922:7922%@sms.ugsm.ru;923:7923%@sms.megafonsib.ru;924:7924%@sms.megafondv.ru;920:7920%@sms.megafoncenter.ru");
+//#else
 			setGates("8050:38050%@sms.umc.ua;8095:38095%@sms.umc.ua;8066:38066%@sms.umc.ua;8099:38099%@sms.umc.ua;8097:38097%@sms.kyivstar.net;8067:38067%@sms.kyivstar.net;8096:38096%@sms.kyivstar.net;8098:38098%@sms.kyivstar.net;8068:38068%@sms.beeline.ua");
+//#endif
 			setCopy("");
 			setLastTitle(-1);
 			setFamily("");
-			setHttp("8063%;8093%");
+			setKS("8063%;8093%");
+			setMTS("+7910%;+7915%;+7917%;+7916%");
 			setTranslitStat(1);
-			setAuthLogin(0);
+			setAuthLogin(1);
 			setE2S("");
 			setE2SUser("");
 			setE2SPass("");
 			setLastMessage("");
+//#if RU
+//# 			setCountryPrefix("+7");
+//#else
+			setCountryPrefix("+3");
+//#endif
 			saveSettings();
 			return;
 		}
@@ -139,12 +149,20 @@ public class OptionsStorage {
 		options.put("Family", family);
 	}
 	
-	public static String getHttp() {
+	public static String getKS() {
 		return (String)options.get("HTTP");
 	}
 	
-	public static void setHttp(String family) {
+	public static String getMTS() {
+		return (String)options.get("MTS");
+	}
+
+        public static void setKS(String family) {
 		options.put("HTTP", family);
+	}
+	
+        public static void setMTS(String family) {
+		options.put("MTS", family);
 	}
 	
 	public static int getTranslitStat() {
@@ -193,4 +211,12 @@ public class OptionsStorage {
 	public static void setLastMessage(String message) {
 		options.put("LastMessage", message);
 	}
+
+        public static String getCountryPrefix() {
+		return (String)options.get("Country");
+        }
+
+        public static void setCountryPrefix(String prefix) {
+		options.put("Country", prefix);
+        }
 }
